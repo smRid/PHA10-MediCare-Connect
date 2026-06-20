@@ -162,6 +162,37 @@ a {
   background-clip: padding-box;
 }
 
+.specialization-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--primary) 78%, var(--foreground) 8%)
+    color-mix(in oklch, var(--background) 92%, var(--primary) 8%);
+}
+
+.specialization-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.specialization-scrollbar::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--background) 92%, var(--primary) 8%);
+  border: 3px solid var(--background);
+}
+
+.specialization-scrollbar::-webkit-scrollbar-thumb {
+  min-height: 42px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklch, var(--primary) 92%, white 8%),
+    color-mix(in oklch, var(--primary) 72%, var(--foreground) 12%)
+  );
+  border: 2px solid var(--background);
+}
+
+.specialization-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
