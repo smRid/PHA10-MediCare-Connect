@@ -1,0 +1,155 @@
+export const specializations = [
+  "General Medicine",
+  "Cardiology",
+  "Dermatology",
+  "Endocrinology",
+  "Gastroenterology",
+  "Neurology",
+  "Obstetrics & Gynecology",
+  "Oncology",
+  "Ophthalmology",
+  "Orthopedics",
+  "Pediatrics",
+  "Psychiatry",
+  "Pulmonology",
+  "Radiology",
+  "Urology",
+  "Diagnostics",
+  "Preventive Care",
+  "Emergency",
+];
+
+export const demoDoctors = [
+  {
+    _id: "demo-cardio",
+    doctorName: "Dr. Mason Lee",
+    specialization: "Cardiology",
+    qualifications: "MBBS, MD Cardiology",
+    experience: 13,
+    consultationFee: 120,
+    hospitalName: "Northline Heart Institute",
+    profileImage:
+      "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=700&q=80",
+    availableDays: ["Monday", "Wednesday", "Friday"],
+    availableSlots: ["09:00 AM", "11:30 AM", "03:00 PM"],
+    verificationStatus: "verified",
+    ratingAverage: 4.9,
+    reviewCount: 210,
+    bio: "Focused on preventive heart care and rapid post-procedure recovery.",
+    location: "New York, NY",
+  },
+  {
+    _id: "demo-neuro",
+    doctorName: "Dr. Selina Ahmed",
+    specialization: "Neurology",
+    qualifications: "MBBS, FCPS Neurology",
+    experience: 9,
+    consultationFee: 95,
+    hospitalName: "Cedar Neuro Center",
+    profileImage:
+      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=700&q=80",
+    availableDays: ["Sunday", "Tuesday", "Thursday"],
+    availableSlots: ["10:00 AM", "01:00 PM", "05:00 PM"],
+    verificationStatus: "verified",
+    ratingAverage: 4.8,
+    reviewCount: 174,
+    bio: "Specializes in migraine care, memory clinics, and neuro-rehab planning.",
+    location: "Austin, TX",
+  },
+  {
+    _id: "demo-peds",
+    doctorName: "Dr. Noor Patel",
+    specialization: "Pediatrics",
+    qualifications: "MBBS, DCH",
+    experience: 7,
+    consultationFee: 70,
+    hospitalName: "Little Oaks Children's Hospital",
+    profileImage:
+      "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=700&q=80",
+    availableDays: ["Monday", "Tuesday", "Saturday"],
+    availableSlots: ["09:30 AM", "12:00 PM", "04:30 PM"],
+    verificationStatus: "verified",
+    ratingAverage: 4.7,
+    reviewCount: 128,
+    bio: "Gentle pediatric care with a practical approach for busy families.",
+    location: "Seattle, WA",
+  },
+  {
+    _id: "demo-derma",
+    doctorName: "Dr. Lena Brooks",
+    specialization: "Dermatology",
+    qualifications: "MD Dermatology",
+    experience: 11,
+    consultationFee: 105,
+    hospitalName: "ClearSkin Clinic",
+    profileImage:
+      "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?auto=format&fit=crop&w=700&q=80",
+    availableDays: ["Wednesday", "Friday", "Saturday"],
+    availableSlots: ["08:30 AM", "02:00 PM", "06:00 PM"],
+    verificationStatus: "verified",
+    ratingAverage: 4.6,
+    reviewCount: 97,
+    bio: "Evidence-based skin care, allergy testing, and cosmetic dermatology.",
+    location: "Chicago, IL",
+  },
+];
+
+export const demoReviews = [
+  {
+    _id: "story-1",
+    patientName: "Ariana Rahman",
+    doctorName: "Dr. Mason Lee",
+    rating: 5,
+    reviewText:
+      "The booking was fast, the doctor had my notes ready, and the follow-up plan was clear.",
+  },
+  {
+    _id: "story-2",
+    patientName: "Marcus Chen",
+    doctorName: "Dr. Selina Ahmed",
+    rating: 5,
+    reviewText:
+      "MediCare Connect made it easy to compare specialists and avoid waiting-room chaos.",
+  },
+  {
+    _id: "story-3",
+    patientName: "Priya Sen",
+    doctorName: "Dr. Noor Patel",
+    rating: 4,
+    reviewText:
+      "The pediatric appointment reminders helped our family stay on schedule.",
+  },
+];
+
+export const demoStats = {
+  totalDoctors: 84,
+  totalPatients: 12800,
+  totalAppointments: 39240,
+  totalReviews: 7600,
+  openSlots: 26,
+};
+
+export const demoAppointments = [
+  {
+    _id: "appt-1",
+    doctorName: "Dr. Mason Lee",
+    patientName: "Ariana Rahman",
+    appointmentDate: "2026-06-24",
+    appointmentTime: "11:30 AM",
+    appointmentStatus: "accepted",
+    paymentStatus: "paid",
+    amount: 120,
+    symptoms: "Chest tightness during morning runs",
+  },
+  {
+    _id: "appt-2",
+    doctorName: "Dr. Selina Ahmed",
+    patientName: "Ariana Rahman",
+    appointmentDate: "2026-06-29",
+    appointmentTime: "01:00 PM",
+    appointmentStatus: "requested",
+    paymentStatus: "unpaid",
+    amount: 95,
+    symptoms: "Recurring migraine",
+  },
+];
