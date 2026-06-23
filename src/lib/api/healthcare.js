@@ -1,5 +1,15 @@
 import { apiFetch, queryString } from "@/lib/api/base";
 
+function collectionFromPayload(payload, key) {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.[key])) return payload[key];
+  if (Array.isArray(payload?.data)) return payload.data;
+  if (Array.isArray(payload?.data?.[key])) return payload.data[key];
+  if (Array.isArray(payload?.result)) return payload.result;
+  if (Array.isArray(payload?.result?.[key])) return payload.result[key];
+  return [];
+}
+
 export const getDoctors = (params = {}) => {
   return apiFetch(`/doctors${queryString(params)}`, { cache: "no-store" });
 };
@@ -13,7 +23,9 @@ export const getStats = () => {
 };
 
 export const getReviews = (params = {}) => {
-  return apiFetch(`/reviews${queryString(params)}`, { cache: "no-store" });
+  return apiFetch(`/reviews${queryString(params)}`, {
+    cache: "no-store",
+  }).then((payload) => collectionFromPayload(payload, "reviews"));
 };
 
 export const getAppointments = (token) => {
