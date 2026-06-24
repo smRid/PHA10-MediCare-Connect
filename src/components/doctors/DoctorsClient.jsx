@@ -101,7 +101,7 @@ export default function DoctorsClient() {
   );
 
   useEffect(() => {
-    setLoading(true);
+    Promise.resolve().then(() => setLoading(true));
     getDoctors(params)
       .then((payload) =>
         setData(

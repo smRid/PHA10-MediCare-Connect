@@ -1,26 +1,31 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
 import Button from "@/components/ui/Button";
 
+const THEME_KEY = "medicare_theme";
+
+function getCurrentTheme() {
+  const root = document.documentElement;
+  const theme = root.getAttribute("data-theme");
+
+  if (theme === "dark" || theme === "light") return theme;
+  return root.classList.contains("dark") ? "dark" : "light";
+}
+
+function applyTheme(theme) {
+  const root = document.documentElement;
+  root.setAttribute("data-theme", theme);
+  root.classList.toggle("dark", theme === "dark");
+  root.classList.toggle("light", theme === "light");
+  root.style.colorScheme = theme;
+}
+
 export default function ThemeToggle() {
-  const [dark, setDark] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("medicare_theme");
-    const shouldDark = saved
-      ? saved === "dark"
-      : window.matchMedia("(prefers-color-scheme: dark)").matches;
-    document.documentElement.classList.toggle("dark", shouldDark);
-    setDark(shouldDark);
-  }, []);
-
   const toggle = () => {
-    const next = !dark;
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("medicare_theme", next ? "dark" : "light");
-    setDark(next);
+    const nextTheme = getCurrentTheme() === "dark" ? "light" : "dark";
+    applyTheme(nextTheme);
+    window.localStorage.setItem(THEME_KEY, nextTheme);
   };
 
   return (
@@ -30,7 +35,8 @@ export default function ThemeToggle() {
       size="icon"
       onClick={toggle}
     >
-      {dark ? <Sun className="size-4" /> : <Moon className="size-4" />}
+      <Moon className="size-4 dark:hidden" />
+      <Sun className="hidden size-4 dark:block" />
     </Button>
   );
 }

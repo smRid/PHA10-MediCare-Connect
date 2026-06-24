@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CalendarPlus, CreditCard, Star } from "lucide-react";
 import { toast } from "react-toastify";
@@ -22,6 +22,11 @@ export default function DoctorDetailsClient({ doctorId }) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [defaultDate] = useState(() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+    return date.toISOString().slice(0, 10);
+  });
 
   useEffect(() => {
     getDoctorById(doctorId)
@@ -38,10 +43,6 @@ export default function DoctorDetailsClient({ doctorId }) {
       .finally(() => setLoading(false));
   }, [doctorId]);
 
-  const defaultDate = useMemo(() => {
-    const date = new Date(Date.now() + 86400000);
-    return date.toISOString().slice(0, 10);
-  }, []);
 
   const submit = async (event) => {
     event.preventDefault();

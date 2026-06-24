@@ -28,11 +28,11 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const savedToken = localStorage.getItem(TOKEN_KEY);
     if (!savedToken) {
-      setLoading(false);
+      Promise.resolve().then(() => setLoading(false));
       return;
     }
 
-    setToken(savedToken);
+    Promise.resolve().then(() => setToken(savedToken));
     apiFetch("/auth/me", { token: savedToken })
       .then((profile) => setUser(profile))
       .catch(() => {

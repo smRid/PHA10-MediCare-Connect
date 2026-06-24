@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
-:root {
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root,
+:root.light,
+:root[data-theme="light"] {
   color-scheme: light;
 
   --background: #f7fbfa;
@@ -19,11 +23,46 @@
   --warning: #f4b740;
   --danger: #e5484d;
   --muted: #5f7f7a;
+  --muted-foreground: #5f7f7a;
+  --card: #ffffff;
+  --card-foreground: #12302f;
+  --input: #c9e4df;
+  --destructive: #e5484d;
   --ring: #47c7b7;
   --shadow: 0 20px 60px rgba(15, 95, 86, 0.12);
   --shadow-sm: 0 10px 30px rgba(15, 95, 86, 0.08);
   --radius-card: 0.5rem;
   --radius-control: 0.375rem;
+}
+
+:root.dark,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: #071918;
+  --foreground: #e8fbf7;
+  --surface: #0e2523;
+  --surface-muted: #12312e;
+  --surface-strong: #17443f;
+  --border: #24554f;
+  --border-strong: #3c8077;
+  --primary: #45d6c4;
+  --primary-foreground: #04211e;
+  --secondary: #7ab7ff;
+  --secondary-foreground: #061a33;
+  --accent: #72df9f;
+  --accent-foreground: #04210f;
+  --warning: #ffd166;
+  --danger: #ff7b81;
+  --muted: #a5c7c1;
+  --muted-foreground: #a5c7c1;
+  --card: #0e2523;
+  --card-foreground: #e8fbf7;
+  --input: #24554f;
+  --destructive: #ff7b81;
+  --ring: #66e0d1;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+  --shadow-sm: 0 12px 32px rgba(0, 0, 0, 0.24);
 }
 
 @theme inline {
@@ -43,13 +82,18 @@
   --color-warning: var(--warning);
   --color-danger: var(--danger);
   --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-input: var(--input);
+  --color-destructive: var(--destructive);
   --color-ring: var(--ring);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light):not([data-theme]) {
     color-scheme: dark;
 
     --background: #071918;
@@ -68,6 +112,11 @@
     --warning: #ffd166;
     --danger: #ff7b81;
     --muted: #a5c7c1;
+    --muted-foreground: #a5c7c1;
+    --card: #0e2523;
+    --card-foreground: #e8fbf7;
+    --input: #24554f;
+    --destructive: #ff7b81;
     --ring: #66e0d1;
     --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
     --shadow-sm: 0 12px 32px rgba(0, 0, 0, 0.24);
