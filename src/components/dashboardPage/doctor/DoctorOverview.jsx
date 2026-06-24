@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { CalendarCheck, MessageSquareHeart, Users } from "lucide-react";
 import { apiFetch } from "@/lib/api/base";
-import { getAppointments } from "@/lib/api/healthcare";
+import { getAppointments, normalizeDoctor } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import StatCard from "@/components/dashboardPage/StatCard";
 import StatusPill from "@/components/shared/StatusPill";
@@ -24,7 +24,7 @@ export default function DoctorOverview() {
       .then(setAppointments)
       .catch(() => setAppointments(fallbackDoctorAppointments));
     apiFetch("/doctors/me", { token })
-      .then(setDoctor)
+      .then((profile) => setDoctor(normalizeDoctor(profile)))
       .catch(() => setDoctor(fallbackDoctorProfile));
   }, [token]);
 

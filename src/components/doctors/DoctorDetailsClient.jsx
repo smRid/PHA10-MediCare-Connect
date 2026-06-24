@@ -5,7 +5,7 @@ import Link from "next/link";
 import { CalendarPlus, CreditCard, Star } from "lucide-react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api/base";
-import { getDoctorById } from "@/lib/api/healthcare";
+import { getDoctorById, getReviews } from "@/lib/api/healthcare";
 import { demoDoctors, demoReviews } from "@/lib/demo-data";
 import { useAuth } from "@/lib/auth-context";
 import { currency } from "@/lib/utils";
@@ -29,10 +29,10 @@ export default function DoctorDetailsClient({ doctorId }) {
   });
 
   useEffect(() => {
-    getDoctorById(doctorId)
-      .then((payload) => {
-        setDoctor(payload.doctor);
-        setReviews(payload.reviews || []);
+    Promise.all([getDoctorById(doctorId), getReviews({ doctorId })])
+      .then(([doctorPayload, reviewPayload]) => {
+        setDoctor(doctorPayload);
+        setReviews(reviewPayload);
       })
       .catch(() => {
         const fallback =
@@ -62,7 +62,12 @@ export default function DoctorDetailsClient({ doctorId }) {
       const appointment = await apiFetch("/appointments", {
         method: "POST",
         token,
-        body: { ...form, doctorId: doctor._id },
+        body: {
+          doctorId: doctor._id,
+          date: form.appointmentDate,
+          time: form.appointmentTime,
+          symptoms: form.symptoms,
+        },
       });
       const intent = await apiFetch("/payments/create-intent", {
         method: "POST",

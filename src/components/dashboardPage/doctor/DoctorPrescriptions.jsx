@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api/base";
-import { getAppointments, getPrescriptions } from "@/lib/api/healthcare";
+import {
+  getAppointments,
+  getPrescriptions,
+  normalizePrescription,
+} from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -44,7 +48,7 @@ export default function DoctorPrescriptions() {
           ],
         },
       });
-      setPrescriptions((items) => [prescription, ...items]);
+      setPrescriptions((items) => [normalizePrescription(prescription), ...items]);
       event.currentTarget.reset();
       toast.success("Prescription created");
     } catch (error) {

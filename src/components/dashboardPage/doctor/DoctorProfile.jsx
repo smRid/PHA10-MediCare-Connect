@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api/base";
+import { normalizeDoctor } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -17,7 +18,9 @@ export default function DoctorProfile() {
 
   useEffect(() => {
     if (!token) return;
-    apiFetch("/doctors/me", { token }).then(setDoctor).catch(() => {});
+    apiFetch("/doctors/me", { token })
+      .then((profile) => setDoctor(normalizeDoctor(profile)))
+      .catch(() => {});
   }, [token]);
 
   const submit = async (event) => {
@@ -29,12 +32,17 @@ export default function DoctorProfile() {
         method: "PATCH",
         token,
         body: {
-          ...form,
+          doctorName: form.doctorName,
+          specialization: form.specialization,
+          qualifications: form.qualifications,
+          hospital: form.hospitalName,
+          image: form.profileImage,
+          bio: form.bio,
           experience: Number(form.experience),
           consultationFee: Number(form.consultationFee),
         },
       });
-      setDoctor(updated);
+      setDoctor(normalizeDoctor(updated));
       toast.success("Doctor profile updated");
     } catch (error) {
       toast.error(error.message);

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api/base";
-import { getDoctors, getReviews } from "@/lib/api/healthcare";
+import { getDoctors, getReviews, normalizeReview } from "@/lib/api/healthcare";
 import { demoDoctors, demoReviews } from "@/lib/demo-data";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
@@ -27,9 +27,13 @@ export default function PatientReviews() {
       const review = await apiFetch("/reviews", {
         method: "POST",
         token,
-        body: Object.fromEntries(new FormData(event.currentTarget)),
+        body: {
+          doctorId: new FormData(event.currentTarget).get("doctorId"),
+          rating: new FormData(event.currentTarget).get("rating"),
+          comment: new FormData(event.currentTarget).get("reviewText"),
+        },
       });
-      setReviews((items) => [review, ...items]);
+      setReviews((items) => [normalizeReview(review), ...items]);
       event.currentTarget.reset();
       toast.success("Review added");
     } catch (error) {

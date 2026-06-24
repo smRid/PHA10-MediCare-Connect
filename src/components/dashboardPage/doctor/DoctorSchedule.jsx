@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api/base";
+import { normalizeDoctor } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -19,9 +20,9 @@ export default function DoctorSchedule() {
     if (!token) return;
     apiFetch("/doctors/me", { token })
       .then((profile) => {
-        setDoctor(profile);
-        setDays(profile.availableDays || []);
-        setSlots(profile.availableSlots || []);
+        setDoctor(normalizeDoctor(profile));
+        setDays(normalizeDoctor(profile).availableDays || []);
+        setSlots(normalizeDoctor(profile).availableSlots || []);
       })
       .catch(() => {});
   }, [token]);
@@ -38,9 +39,9 @@ export default function DoctorSchedule() {
       const updated = await apiFetch(`/doctors/${doctor._id}`, {
         method: "PATCH",
         token,
-        body: { availableDays: days, availableSlots: slots },
+        body: { days, slots },
       });
-      setDoctor(updated);
+      setDoctor(normalizeDoctor(updated));
       toast.success("Schedule updated");
     } catch (error) {
       toast.error(error.message);

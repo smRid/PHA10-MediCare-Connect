@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api/base";
-import { getAppointments } from "@/lib/api/healthcare";
+import { getAppointments, normalizeAppointment } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import StatusPill from "@/components/shared/StatusPill";
@@ -28,10 +28,12 @@ export default function DoctorAppointments() {
       const updated = await apiFetch(`/appointments/${id}`, {
         method: "PATCH",
         token,
-        body: { appointmentStatus },
+        body: { status: appointmentStatus },
       });
       setAppointments((items) =>
-        items.map((item) => (item._id === id ? updated : item)),
+        items.map((item) =>
+          item._id === id ? normalizeAppointment(updated) : item,
+        ),
       );
       toast.success(`Appointment marked ${appointmentStatus}`);
       if (appointmentStatus === "completed") {

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api/base";
-import { getAppointments } from "@/lib/api/healthcare";
+import { getAppointments, normalizeAppointment } from "@/lib/api/healthcare";
 import { demoAppointments } from "@/lib/demo-data";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
@@ -31,7 +31,9 @@ export default function PatientAppointments() {
         body: updates,
       });
       setAppointments((items) =>
-        items.map((item) => (item._id === id ? updated : item)),
+        items.map((item) =>
+          item._id === id ? normalizeAppointment(updated) : item,
+        ),
       );
       setEditingId(null);
       toast.success("Appointment updated");
@@ -80,7 +82,10 @@ export default function PatientAppointments() {
                   event.preventDefault();
                   updateAppointment(
                     item._id,
-                    Object.fromEntries(new FormData(event.currentTarget)),
+                    {
+                      date: new FormData(event.currentTarget).get("appointmentDate"),
+                      time: new FormData(event.currentTarget).get("appointmentTime"),
+                    },
                   );
                 }}
                 className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr_auto]"
@@ -102,7 +107,7 @@ export default function PatientAppointments() {
                   variant="danger"
                   onClick={() =>
                     updateAppointment(item._id, {
-                      appointmentStatus: "cancelled",
+                      status: "cancelled",
                     })
                   }
                 >
