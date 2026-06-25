@@ -17,7 +17,7 @@ export default function DashboardTopbar({ user, onMenu }) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-card/88 backdrop-blur-xl">
+    <header className="sticky top-16 z-30 border-b border-border bg-card/88 backdrop-blur-xl">
       <div className="flex h-16 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
           <button

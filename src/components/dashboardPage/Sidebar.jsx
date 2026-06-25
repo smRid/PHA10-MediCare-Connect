@@ -93,10 +93,10 @@ export default function Sidebar({ user, open, onClose }) {
 
   return (
     <>
-      <div className="fixed inset-y-0 left-0 z-40 hidden lg:block">{aside}</div>
+      <div className="fixed bottom-0 left-0 top-16 z-40 hidden lg:block">{aside}</div>
       <div
         className={cn(
-          "fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition lg:hidden",
+          "fixed inset-x-0 bottom-0 top-16 z-50 bg-black/40 backdrop-blur-sm transition lg:hidden",
           open ? "opacity-100" : "pointer-events-none opacity-0",
         )}
         onClick={onClose}
