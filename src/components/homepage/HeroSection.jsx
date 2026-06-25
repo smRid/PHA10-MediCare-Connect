@@ -16,11 +16,11 @@ function compactNumber(value) {
 
 const heroSlides = [
   {
-    src: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=1200",
+    src: "/1.jpg",
     alt: "Doctor with patient",
   },
   {
-    src: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=1200",
+    src: "/2.jpg",
     alt: "Hospital tech",
   },
   {
