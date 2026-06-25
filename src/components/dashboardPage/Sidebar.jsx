@@ -2,57 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut, X } from "lucide-react";
 import { getNavByRole } from "@/constants/nav-links";
-import { useAuth } from "@/lib/auth-context";
-import { cn, initials } from "@/lib/utils";
-import BrandMark from "@/components/shared/BrandMark";
-import StatusPill from "@/components/shared/StatusPill";
+import { cn } from "@/lib/utils";
 
 export default function Sidebar({ user, open, onClose }) {
   const pathname = usePathname();
-  const { logout } = useAuth();
   const nav = getNavByRole(user.role);
 
   const aside = (
     <aside className="flex h-full w-64 flex-col border-r border-border bg-card">
-      <div className="flex h-16 items-center justify-between border-b border-border px-4">
-        <Link href="/" onClick={onClose} aria-label="MediCare Connect home">
-          <BrandMark compact />
-        </Link>
-        <button
-          type="button"
-          onClick={onClose}
-          className="rounded-lg p-2 text-muted-foreground lg:hidden"
-          aria-label="Close dashboard menu"
-        >
-          <X className="size-5" />
-        </button>
-      </div>
-
-      <div className="border-b border-border p-4">
-        <div className="flex items-center gap-3">
-          <span className="flex size-11 items-center justify-center overflow-hidden rounded-full bg-primary/10 font-bold text-primary">
-            {user.photo ? (
-              <img
-                src={user.photo}
-                alt={user.name}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              initials(user.name)
-            )}
-          </span>
-          <div className="min-w-0">
-            <p className="truncate font-semibold">{user.name}</p>
-            <p className="truncate text-xs text-muted-foreground">{user.email}</p>
-          </div>
-        </div>
-        <div className="mt-3">
-          <StatusPill status={user.status || "active"} />
-        </div>
-      </div>
-
       <nav className="flex-1 overflow-y-auto p-3">
         <ul className="grid gap-1">
           {nav.map(({ href, label, icon: Icon }) => {
@@ -77,17 +35,6 @@ export default function Sidebar({ user, open, onClose }) {
           })}
         </ul>
       </nav>
-
-      <div className="border-t border-border p-3">
-        <button
-          type="button"
-          onClick={logout}
-          className="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-semibold text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
-        >
-          <LogOut className="size-4" />
-          Logout
-        </button>
-      </div>
     </aside>
   );
 

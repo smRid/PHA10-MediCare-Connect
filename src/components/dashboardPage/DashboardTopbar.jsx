@@ -1,9 +1,7 @@
 "use client";
 
-import { Bell, Menu, Search } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { usePathname } from "next/navigation";
-import ThemeToggle from "@/components/shared/ThemeToggle";
-import { initials } from "@/lib/utils";
 
 function titleFromPath(pathname) {
   const last = pathname.split("/").filter(Boolean).at(-1) || "dashboard";
@@ -45,29 +43,6 @@ export default function DashboardTopbar({ user, onMenu }) {
             placeholder="Search dashboard..."
             className="w-full bg-transparent text-sm outline-none"
           />
-        </div>
-
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <button
-            type="button"
-            className="relative flex size-10 items-center justify-center rounded-lg border border-border text-muted-foreground"
-            aria-label="Notifications"
-          >
-            <Bell className="size-4" />
-            <span className="absolute right-2 top-2 size-2 rounded-full bg-primary" />
-          </button>
-          <div className="flex size-10 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-sm font-bold text-primary">
-            {user.photo ? (
-              <img
-                src={user.photo}
-                alt={user.name}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              initials(user.name)
-            )}
-          </div>
         </div>
       </div>
     </header>
