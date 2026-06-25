@@ -12,7 +12,7 @@ import ThemeToggle from "@/components/shared/ThemeToggle";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
@@ -66,7 +66,9 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-3 md:flex">
           <ThemeToggle />
-          {user ? (
+          {loading ? (
+            <UserMenuSkeleton />
+          ) : user ? (
             <UserMenu
               user={user}
               open={userMenuOpen}
@@ -112,7 +114,9 @@ export default function Navbar() {
           {links}
           <div className="mt-3 flex items-start gap-3">
             <ThemeToggle />
-            {user ? (
+            {loading ? (
+              <UserMenuSkeleton />
+            ) : user ? (
               <UserMenu
                 user={user}
                 open={userMenuOpen}
@@ -143,6 +147,19 @@ export default function Navbar() {
         </div>
       </div>
     </header>
+  );
+}
+
+function UserMenuSkeleton() {
+  return (
+    <div
+      aria-hidden="true"
+      className="flex h-12 w-[184px] items-center gap-3 rounded-full bg-muted/80 px-3 pr-4"
+    >
+      <span className="size-10 shrink-0 animate-pulse rounded-full bg-muted-foreground/20" />
+      <span className="h-4 flex-1 animate-pulse rounded-full bg-muted-foreground/20" />
+      <span className="size-4 shrink-0 animate-pulse rounded-full bg-muted-foreground/20" />
+    </div>
   );
 }
 
