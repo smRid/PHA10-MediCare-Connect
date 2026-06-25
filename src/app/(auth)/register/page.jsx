@@ -8,6 +8,7 @@ import { UserPlus } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import PasswordInput from "@/components/ui/PasswordInput";
 import BrandMark from "@/components/shared/BrandMark";
 
 const passwordRule = /^(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?]).{6,}$/;
@@ -84,10 +85,9 @@ export default function RegisterPage() {
           />
         </div>
         <Input name="photo" label="Photo URL" placeholder="https://..." />
-        <Input
+        <PasswordInput
           name="password"
           label="Password"
-          type="password"
           placeholder="Care#123"
           required
         />

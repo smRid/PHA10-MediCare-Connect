@@ -9,6 +9,7 @@ import { useSession } from "@/lib/auth-client";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import PasswordInput from "@/components/ui/PasswordInput";
 import BrandMark from "@/components/shared/BrandMark";
 
 export default function LoginPage() {
@@ -90,10 +91,9 @@ export default function LoginPage() {
           placeholder="admin@medicare.test"
           required
         />
-        <Input
+        <PasswordInput
           name="password"
           label="Password"
-          type="password"
           placeholder="Admin#12345"
           required
         />
