@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { BadgeCheck, LogIn } from "lucide-react";
+import { useSession } from "@/lib/auth-client";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -12,9 +13,34 @@ import BrandMark from "@/components/shared/BrandMark";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, googleLogin } = useAuth();
+  const { login, googleLogin, completeGoogleLogin } = useAuth();
+  const { data: googleSession, isPending: googlePending } = useSession();
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState("patient");
+  const googleSyncRef = useRef(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const googleRole = params.get("googleRole");
+
+    if (!googleRole || googlePending || googleSyncRef.current) return;
+
+    if (!googleSession?.user) {
+      toast.error("Google sign-in session was not found");
+      return;
+    }
+
+    googleSyncRef.current = true;
+
+    completeGoogleLogin({ role: googleRole, profile: googleSession.user })
+      .then((payload) => {
+        router.replace(`/dashboard/${payload.user.role}`);
+      })
+      .catch((error) => {
+        googleSyncRef.current = false;
+        toast.error(error.message);
+      });
+  }, [completeGoogleLogin, googlePending, googleSession, router]);
 
   const submit = async (event) => {
     event.preventDefault();
@@ -33,8 +59,7 @@ export default function LoginPage() {
   const handleGoogle = async () => {
     setLoading(true);
     try {
-      const payload = await googleLogin(role);
-      router.push(`/dashboard/${payload.user.role}`);
+      await googleLogin(role);
     } catch (error) {
       toast.error(error.message);
     } finally {

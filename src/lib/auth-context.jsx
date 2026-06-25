@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { signIn as betterSignIn, signOut as betterSignOut } from "@/lib/auth-client";
 import { apiFetch } from "@/lib/api/base";
 
 const AuthContext = createContext(null);
@@ -71,13 +72,31 @@ export function AuthProvider({ children }) {
 
   const googleLogin = useCallback(
     async (role = "patient") => {
+      const { error } = await betterSignIn.social({
+        provider: "google",
+        callbackURL: `/login?googleRole=${encodeURIComponent(role)}`,
+        errorCallbackURL: "/login",
+      });
+
+      if (error) {
+        throw new Error(error.message || "Google sign-in failed");
+      }
+    },
+    [],
+  );
+
+  const completeGoogleLogin = useCallback(
+    async ({ role = "patient", profile }) => {
+      if (!profile?.email) {
+        throw new Error("Google profile email is required");
+      }
+
       const payload = await apiFetch("/auth/google", {
         method: "POST",
         body: {
-          name: "Google Care Member",
-          email: `google.${role}@medicare.test`,
-          photo:
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80",
+          name: profile.name || "Google Care Member",
+          email: profile.email,
+          photo: profile.image || profile.photo || "",
           role,
         },
       });
@@ -106,6 +125,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem(TOKEN_KEY);
     setToken(null);
     setUser(null);
+    betterSignOut().catch(() => {});
     toast.info("Signed out");
   }, []);
 
@@ -118,10 +138,21 @@ export function AuthProvider({ children }) {
       login,
       register,
       googleLogin,
+      completeGoogleLogin,
       updateProfile,
       logout,
     }),
-    [googleLogin, loading, login, logout, register, token, updateProfile, user],
+    [
+      completeGoogleLogin,
+      googleLogin,
+      loading,
+      login,
+      logout,
+      register,
+      token,
+      updateProfile,
+      user,
+    ],
   );
 
   return (
