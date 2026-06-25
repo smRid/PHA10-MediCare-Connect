@@ -20,15 +20,6 @@ export default function AuthLayout({ children }) {
             dashboard after reloads while protected APIs verify each request.
           </p>
         </div>
-        <div className="rounded-lg border border-border bg-background/80 p-4 text-sm text-muted-foreground">
-          Demo admin:{" "}
-          <span className="font-semibold text-foreground">
-            admin@medicare.test
-          </span>
-          <br />
-          Password:{" "}
-          <span className="font-semibold text-foreground">Admin#12345</span>
-        </div>
       </section>
       <section className="flex items-center justify-center px-4 py-12">
         {children}

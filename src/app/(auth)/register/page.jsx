@@ -56,16 +56,16 @@ export default function RegisterPage() {
         Doctors join unverified first. Admins can approve them from the dashboard.
       </p>
 
-      <div className="mt-5 grid grid-cols-2 gap-2 rounded-lg bg-muted p-1">
+      <div className="mt-5 grid grid-cols-2 gap-2 rounded-lg bg-muted/50 p-1">
         {["patient", "doctor"].map((item) => (
           <button
             key={item}
             type="button"
             onClick={() => setRole(item)}
-            className={`rounded-lg px-3 py-2 text-sm font-semibold capitalize transition ${
+            className={`rounded-md px-3 py-2 text-sm font-semibold capitalize transition-all ${
               role === item
-                ? "bg-card text-primary shadow-sm"
-                : "text-muted-foreground"
+                ? "bg-background text-foreground shadow-sm ring-1 ring-border/50"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
             }`}
           >
             {item}
@@ -88,7 +88,7 @@ export default function RegisterPage() {
         <PasswordInput
           name="password"
           label="Password"
-          placeholder="Care#123"
+          placeholder="••••••••"
           required
         />
 

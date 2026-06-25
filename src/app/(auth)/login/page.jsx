@@ -88,13 +88,13 @@ export default function LoginPage() {
           name="email"
           label="Email"
           type="email"
-          placeholder="admin@medicare.test"
+          placeholder="you@example.com"
           required
         />
         <PasswordInput
           name="password"
           label="Password"
-          placeholder="Admin#12345"
+          placeholder="••••••••"
           required
         />
         <Button type="submit" size="lg" disabled={loading}>
@@ -113,7 +113,7 @@ export default function LoginPage() {
         <select
           value={role}
           onChange={(event) => setRole(event.target.value)}
-          className="h-10 rounded-lg border border-input bg-card px-3 text-sm outline-none focus:border-primary"
+          className="h-10 rounded-lg border border-input bg-background px-3 text-sm outline-none focus:border-primary"
         >
           <option value="patient">Google as patient</option>
           <option value="doctor">Google as doctor</option>
