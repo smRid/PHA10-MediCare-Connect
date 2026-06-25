@@ -52,7 +52,7 @@ export default function AuthSidePanel() {
               <img
                 src={content.image}
                 alt={content.title}
-                className="h-64 w-full object-cover"
+                className="aspect-[4/3] w-full object-cover lg:aspect-[16/11]"
               />
             </div>
 
