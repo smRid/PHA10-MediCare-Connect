@@ -65,9 +65,9 @@ export default function HeroSection() {
   );
 
   return (
-    <section className="relative overflow-hidden border-b border-border px-4 py-16 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden border-b border-border px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
       <div className="absolute inset-0 medical-grid opacity-60" />
-      <div className="relative mx-auto grid max-w-7xl gap-10 lg:min-h-[calc(100vh-4rem)] lg:grid-cols-[1fr_0.95fr] lg:items-center">
+      <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_0.95fr] lg:items-center">
         <motion.div
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
