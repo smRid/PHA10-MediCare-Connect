@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Trash2, UserX, UserCheck } from "lucide-react";
-import { getUsers } from "@/lib/api/healthcare";
+import { getUsers, deleteUser, updateUser } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import SectionHeading from "@/components/shared/SectionHeading";
 import StatusPill from "@/components/shared/StatusPill";
@@ -21,6 +22,33 @@ export default function ManageUsers() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [token]);
+
+  const handleSuspend = async (userId, currentStatus) => {
+    if (!token) return;
+    try {
+      const newStatus = currentStatus === "suspended" ? "active" : "suspended";
+      await updateUser(userId, { status: newStatus }, token);
+      setUsers((current) =>
+        current.map((user) => (user._id === userId ? { ...user, status: newStatus } : user)),
+      );
+      toast.success(`User ${newStatus}`);
+    } catch (error) {
+      toast.error(error.message || "Failed to update user status");
+    }
+  };
+
+  const handleDelete = async (userId) => {
+    if (!token) return;
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+    
+    try {
+      await deleteUser(userId, token);
+      setUsers((current) => current.filter((user) => user._id !== userId));
+      toast.success("User deleted successfully");
+    } catch (error) {
+      toast.error(error.message || "Failed to delete user");
+    }
+  };
 
   if (loading) return <LoadingState label="Loading users" />;
 
@@ -54,10 +82,10 @@ export default function ManageUsers() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-2">
-                      <Button variant="outline" size="sm" title="Suspend User">
+                      <Button variant="outline" size="sm" title="Suspend User" onClick={() => handleSuspend(user._id, user.status)}>
                         {user.status === "suspended" ? <UserCheck className="size-4" /> : <UserX className="size-4" />}
                       </Button>
-                      <Button variant="outline" size="sm" className="text-red-500 hover:bg-red-50 hover:text-red-600" title="Delete User">
+                      <Button variant="outline" size="sm" className="text-red-500 hover:bg-red-50 hover:text-red-600" title="Delete User" onClick={() => handleDelete(user._id)}>
                         <Trash2 className="size-4" />
                       </Button>
                     </div>
