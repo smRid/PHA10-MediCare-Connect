@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Calendar, Clock, User, Stethoscope } from "lucide-react";
 import { getAppointments } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import SectionHeading from "@/components/shared/SectionHeading";
@@ -44,10 +45,30 @@ export default function AdminAppointments() {
             <tbody>
               {appointments.map((appt) => (
                 <tr key={appt._id} className="border-t border-border">
-                  <td className="px-4 py-3 font-semibold">{appt.patientName}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{appt.doctorName}</td>
-                  <td className="px-4 py-3">{appt.appointmentDate}</td>
-                  <td className="px-4 py-3">{appt.appointmentTime}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <User className="size-4 text-muted-foreground" />
+                      <span className="font-semibold text-foreground">{appt.patientName}</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Stethoscope className="size-4" />
+                      <span>{appt.doctorName}</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="size-3.5" />
+                      {appt.appointmentDate}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 font-medium text-foreground">
+                    <div className="flex items-center gap-2">
+                      <Clock className="size-3.5 text-primary" />
+                      {appt.appointmentTime}
+                    </div>
+                  </td>
                   <td className="px-4 py-3 text-right">
                     <StatusPill status={appt.appointmentStatus} />
                   </td>

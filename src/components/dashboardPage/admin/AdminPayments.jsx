@@ -37,7 +37,7 @@ export default function AdminPayments() {
                 <th className="px-4 py-3">Transaction ID</th>
                 <th className="px-4 py-3">Patient</th>
                 <th className="px-4 py-3">Doctor</th>
-                <th className="px-4 py-3">Amount</th>
+                <th className="px-4 py-3 text-right">Amount</th>
                 <th className="px-4 py-3">Date</th>
                 <th className="px-4 py-3 text-right">Status</th>
               </tr>
@@ -50,15 +50,19 @@ export default function AdminPayments() {
                     <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
                       {payment.transactionId || payment._id.slice(-8)}
                     </td>
-                    <td className="px-4 py-3 font-semibold">
+                    <td className="px-4 py-3 font-semibold text-foreground">
                       {payment.appointment?.patientName || "Unknown"}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
                       {payment.appointment?.doctorName || "Unknown"}
                     </td>
-                    <td className="px-4 py-3 font-medium">${Number(amount).toFixed(2)}</td>
-                    <td className="px-4 py-3">
-                      {new Date(payment.paymentDate).toLocaleDateString()}
+                    <td className="px-4 py-3 text-right font-medium text-primary">
+                      {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(Number(amount))}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-muted-foreground">
+                      {new Date(payment.paymentDate).toLocaleDateString(undefined, {
+                        year: 'numeric', month: 'short', day: 'numeric'
+                      })}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <StatusPill status={payment.status || "paid"} />
