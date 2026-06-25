@@ -61,7 +61,18 @@ export default function ManageDoctors() {
             <tbody>
               {doctors.map((doctor) => (
                 <tr key={doctor._id} className="border-t border-border">
-                  <td className="px-4 py-3 font-semibold">{doctor.doctorName}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      {doctor.profileImage ? (
+                        <img src={doctor.profileImage} alt={doctor.doctorName} className="size-8 rounded-full object-cover" />
+                      ) : (
+                        <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                          {doctor.doctorName?.charAt(0) || "D"}
+                        </div>
+                      )}
+                      <span className="font-semibold">{doctor.doctorName}</span>
+                    </div>
+                  </td>
                   <td className="px-4 py-3">{doctor.specialization}</td>
                   <td className="px-4 py-3">{doctor.experience} years</td>
                   <td className="px-4 py-3">
