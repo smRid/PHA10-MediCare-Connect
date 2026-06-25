@@ -13,20 +13,19 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import { formatDate } from "@/lib/utils";
-import { fallbackDoctorAppointments } from "./doctor-utils";
 
 export default function DoctorPrescriptions() {
-  const { token } = useAuth();
-  const [appointments, setAppointments] = useState(fallbackDoctorAppointments);
+  const { token, user } = useAuth();
+  const [appointments, setAppointments] = useState([]);
   const [prescriptions, setPrescriptions] = useState([]);
 
   useEffect(() => {
-    if (!token) return;
-    getAppointments(token)
-      .then(setAppointments)
-      .catch(() => setAppointments(fallbackDoctorAppointments));
+    if (!token || !user) return;
+    getAppointments(token, { doctorId: user?._id, status: "accepted" })
+      .then((data) => setAppointments(data || []))
+      .catch(() => setAppointments([]));
     getPrescriptions(token).then(setPrescriptions).catch(() => setPrescriptions([]));
-  }, [token]);
+  }, [token, user]);
 
   const submit = async (event) => {
     event.preventDefault();

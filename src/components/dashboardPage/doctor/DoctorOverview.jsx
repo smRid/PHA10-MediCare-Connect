@@ -2,31 +2,28 @@
 
 import { useEffect, useState } from "react";
 import { CalendarCheck, MessageSquareHeart, Users } from "lucide-react";
-import { apiFetch } from "@/lib/api/base";
-import { getAppointments, normalizeDoctor } from "@/lib/api/healthcare";
+import { getAppointments } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import StatCard from "@/components/dashboardPage/StatCard";
 import StatusPill from "@/components/shared/StatusPill";
 import { formatDate } from "@/lib/utils";
-import {
-  fallbackDoctorAppointments,
-  fallbackDoctorProfile,
-} from "./doctor-utils";
+import { getDoctorStats, getDoctorById } from "./doctor-utils";
 
 export default function DoctorOverview() {
-  const { token } = useAuth();
-  const [appointments, setAppointments] = useState(fallbackDoctorAppointments);
-  const [doctor, setDoctor] = useState(fallbackDoctorProfile);
+  const { token, user } = useAuth();
+  const [appointments, setAppointments] = useState([]);
+  const [doctor, setDoctor] = useState(null);
 
   useEffect(() => {
     if (!token) return;
-    getAppointments(token)
+    getAppointments(token, { doctorId: user?._id })
       .then(setAppointments)
-      .catch(() => setAppointments(fallbackDoctorAppointments));
-    apiFetch("/doctors/me", { token })
-      .then((profile) => setDoctor(normalizeDoctor(profile)))
-      .catch(() => setDoctor(fallbackDoctorProfile));
-  }, [token]);
+      .catch(() => setAppointments([]));
+
+    getDoctorById(user?._id)
+      .then((data) => setDoctor(data || null))
+      .catch(() => setDoctor(null));
+  }, [token, user]);
 
   const todays = appointments.filter((item) => {
     const today = new Date().toISOString().slice(0, 10);

@@ -9,11 +9,10 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import StatusPill from "@/components/shared/StatusPill";
-import { fallbackDoctorProfile } from "./doctor-utils";
 
 export default function DoctorProfile() {
   const { token } = useAuth();
-  const [doctor, setDoctor] = useState(fallbackDoctorProfile);
+  const [doctor, setDoctor] = useState(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {

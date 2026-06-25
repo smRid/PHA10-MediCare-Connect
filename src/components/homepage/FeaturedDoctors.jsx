@@ -3,20 +3,17 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { demoDoctors } from "@/lib/demo-data";
 import { getDoctors } from "@/lib/api/healthcare";
 import SectionHeading from "@/components/shared/SectionHeading";
 import DoctorCard from "@/components/doctors/DoctorCard";
 
 export default function FeaturedDoctors() {
-  const [doctors, setDoctors] = useState(demoDoctors.slice(0, 3));
+  const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
     getDoctors({ page: 1, perPage: 3, sort: "rating" })
-      .then((data) =>
-        setDoctors(data.doctors?.length ? data.doctors : demoDoctors.slice(0, 3)),
-      )
-      .catch(() => setDoctors(demoDoctors.slice(0, 3)));
+      .then((data) => setDoctors(data.doctors || []))
+      .catch(() => setDoctors([]));
   }, []);
 
   return (

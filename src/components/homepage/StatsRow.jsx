@@ -3,26 +3,25 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  CalendarDays,
-  MessageSquareHeart,
-  Stethoscope,
   Users,
+  Stethoscope,
+  CalendarCheck,
+  Star,
+  ArrowUpRight,
 } from "lucide-react";
-import { demoStats } from "@/lib/demo-data";
 import { getStats } from "@/lib/api/healthcare";
 
 const cards = [
   { key: "totalDoctors", label: "Total Doctors", icon: Stethoscope },
   { key: "totalPatients", label: "Total Patients", icon: Users },
-  { key: "totalAppointments", label: "Total Appointments", icon: CalendarDays },
   { key: "totalReviews", label: "Total Reviews", icon: MessageSquareHeart },
 ];
 
 export default function StatsRow() {
-  const [stats, setStats] = useState(demoStats);
+  const [stats, setStats] = useState({ totalPatients: 0, totalDoctors: 0, totalAppointments: 0, totalReviews: 0 });
 
   useEffect(() => {
-    getStats().then(setStats).catch(() => setStats(demoStats));
+    getStats().then(setStats).catch(() => setStats({ totalPatients: 0, totalDoctors: 0, totalAppointments: 0, totalReviews: 0 }));
   }, []);
 
   return (

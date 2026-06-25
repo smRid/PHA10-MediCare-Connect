@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api/base";
 import { getAppointments, normalizeAppointment } from "@/lib/api/healthcare";
-import { demoAppointments } from "@/lib/demo-data";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -13,14 +12,14 @@ import { currency, formatDate } from "@/lib/utils";
 
 export default function PatientAppointments() {
   const { token } = useAuth();
-  const [appointments, setAppointments] = useState(demoAppointments);
+  const [appointments, setAppointments] = useState([]);
   const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
     if (!token) return;
     getAppointments(token)
       .then(setAppointments)
-      .catch(() => setAppointments(demoAppointments));
+      .catch(() => setAppointments([]));
   }, [token]);
 
   const updateAppointment = async (id, updates) => {

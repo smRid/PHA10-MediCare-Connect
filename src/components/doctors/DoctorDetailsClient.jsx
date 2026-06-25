@@ -6,8 +6,6 @@ import { CalendarPlus, CreditCard, Star } from "lucide-react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api/base";
 import { getDoctorById, getReviews } from "@/lib/api/healthcare";
-import { demoDoctors, demoReviews } from "@/lib/demo-data";
-import { useAuth } from "@/lib/auth-context";
 import { currency } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -33,12 +31,6 @@ export default function DoctorDetailsClient({ doctorId }) {
       .then(([doctorPayload, reviewPayload]) => {
         setDoctor(doctorPayload);
         setReviews(reviewPayload);
-      })
-      .catch(() => {
-        const fallback =
-          demoDoctors.find((item) => item._id === doctorId) || demoDoctors[0];
-        setDoctor(fallback);
-        setReviews(demoReviews);
       })
       .finally(() => setLoading(false));
   }, [doctorId]);

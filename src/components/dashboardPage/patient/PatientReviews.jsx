@@ -4,22 +4,24 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api/base";
 import { getDoctors, getReviews, normalizeReview } from "@/lib/api/healthcare";
-import { demoDoctors, demoReviews } from "@/lib/demo-data";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Textarea from "@/components/ui/Textarea";
 
 export default function PatientReviews() {
-  const { token } = useAuth();
-  const [reviews, setReviews] = useState(demoReviews);
-  const [doctors, setDoctors] = useState(demoDoctors);
+  const { token, user } = useAuth();
+  const [reviews, setReviews] = useState([]);
+  const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
-    getReviews().then(setReviews).catch(() => setReviews(demoReviews));
+    if (!token) return;
+    getReviews({ patientId: user?._id })
+      .then((items) => setReviews(items || []))
+      .catch(() => setReviews([]));
     getDoctors({ perPage: 50 })
-      .then((data) => setDoctors(data.doctors || demoDoctors))
-      .catch(() => setDoctors(demoDoctors));
-  }, []);
+      .then((data) => setDoctors(data.doctors || []))
+      .catch(() => setDoctors([]));
+  }, [token, user]);
 
   const submit = async (event) => {
     event.preventDefault();

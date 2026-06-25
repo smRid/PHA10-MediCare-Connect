@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { getPayments } from "@/lib/api/healthcare";
-import { demoAppointments } from "@/lib/demo-data";
 import { useAuth } from "@/lib/auth-context";
 import StatusPill from "@/components/shared/StatusPill";
 import { currency, formatDate } from "@/lib/utils";
@@ -13,13 +12,11 @@ export default function PaymentHistory() {
 
   useEffect(() => {
     if (!token) return;
-    getPayments(token).then(setPayments).catch(() => setPayments([]));
+    getPayments(token)
+      .then(setPayments)
+      .catch(() => setPayments([]));
   }, [token]);
 
-  const fallback = demoAppointments
-    .filter((item) => item.paymentStatus === "paid")
-    .map((item) => ({
-      _id: item._id,
       appointmentId: item._id,
       amount: item.amount,
       transactionId: "demo_txn_patient",

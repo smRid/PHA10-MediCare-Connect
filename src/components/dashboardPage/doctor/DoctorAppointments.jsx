@@ -8,20 +8,20 @@ import { getAppointments, normalizeAppointment } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import StatusPill from "@/components/shared/StatusPill";
+import SectionHeading from "@/components/shared/SectionHeading";
 import { formatDate } from "@/lib/utils";
-import { fallbackDoctorAppointments } from "./doctor-utils";
 
 export default function DoctorAppointments() {
   const router = useRouter();
-  const { token } = useAuth();
-  const [appointments, setAppointments] = useState(fallbackDoctorAppointments);
+  const { token, user } = useAuth();
+  const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
     if (!token) return;
-    getAppointments(token)
+    getAppointments(token, { doctorId: user?._id })
       .then(setAppointments)
-      .catch(() => setAppointments(fallbackDoctorAppointments));
-  }, [token]);
+      .catch(() => setAppointments([]));
+  }, [token, user]);
 
   const setStatus = async (id, appointmentStatus) => {
     try {

@@ -3,17 +3,16 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Quote, Star } from "lucide-react";
-import { demoReviews } from "@/lib/demo-data";
 import { getReviews } from "@/lib/api/healthcare";
 import SectionHeading from "@/components/shared/SectionHeading";
 
 export default function PatientStories() {
-  const [reviews, setReviews] = useState(demoReviews);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     getReviews()
-      .then((items) => setReviews(items?.length ? items.slice(0, 3) : demoReviews))
-      .catch(() => setReviews(demoReviews));
+      .then((items) => setReviews(items?.length ? items.slice(0, 3) : []))
+      .catch(() => setReviews([]));
   }, []);
 
   return (

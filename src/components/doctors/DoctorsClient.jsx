@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Check, ChevronDown, LayoutGrid, List, Search } from "lucide-react";
-import { demoDoctors, specializations } from "@/lib/demo-data";
+import { specializations } from "@/lib/constants";
 import { getDoctors } from "@/lib/api/healthcare";
 import Button from "@/components/ui/Button";
 import DoctorCard from "@/components/doctors/DoctorCard";
@@ -88,8 +88,8 @@ export default function DoctorsClient() {
   const [page, setPage] = useState(1);
   const [layout, setLayout] = useState("card");
   const [data, setData] = useState({
-    doctors: demoDoctors,
-    total: demoDoctors.length,
+    doctors: [],
+    total: 0,
     page: 1,
     perPage: 9,
   });
@@ -100,23 +100,6 @@ export default function DoctorsClient() {
     [page, search, sort, specialization],
   );
 
-  useEffect(() => {
-    Promise.resolve().then(() => setLoading(true));
-    getDoctors(params)
-      .then((payload) =>
-        setData(
-          payload.doctors?.length
-            ? payload
-            : {
-                doctors: demoDoctors,
-                total: demoDoctors.length,
-                page: 1,
-                perPage: 9,
-              },
-        ),
-      )
-      .catch(() => {
-        let filtered = demoDoctors.filter((doctor) => {
           const haystack =
             `${doctor.doctorName} ${doctor.specialization}`.toLowerCase();
           return haystack.includes(search.toLowerCase());

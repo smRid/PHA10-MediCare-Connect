@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { CalendarClock, CreditCard, Heart, History } from "lucide-react";
 import { getAppointments, getPayments } from "@/lib/api/healthcare";
-import { demoAppointments, demoDoctors } from "@/lib/demo-data";
 import { useAuth } from "@/lib/auth-context";
 import StatCard from "@/components/dashboardPage/StatCard";
 import StatusPill from "@/components/shared/StatusPill";
@@ -11,14 +10,14 @@ import { currency, formatDate } from "@/lib/utils";
 
 export default function PatientOverview() {
   const { token } = useAuth();
-  const [appointments, setAppointments] = useState(demoAppointments);
+  const [appointments, setAppointments] = useState([]);
   const [payments, setPayments] = useState([]);
 
   useEffect(() => {
     if (!token) return;
     getAppointments(token)
       .then(setAppointments)
-      .catch(() => setAppointments(demoAppointments));
+      .catch(() => setAppointments([]));
     getPayments(token).then(setPayments).catch(() => setPayments([]));
   }, [token]);
 
@@ -58,8 +57,8 @@ export default function PatientOverview() {
         <StatCard
           icon={Heart}
           label="Favorite Doctors"
-          value={demoDoctors.length}
-          helper="Demo favorites from discovery"
+          value={0}
+          helper="Tracked favorites"
         />
       </section>
 

@@ -8,24 +8,25 @@ import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Badge from "@/components/ui/Badge";
-import { fallbackDoctorProfile } from "./doctor-utils";
+import SectionHeading from "@/components/shared/SectionHeading";
 
 export default function DoctorSchedule() {
-  const { token } = useAuth();
-  const [doctor, setDoctor] = useState(fallbackDoctorProfile);
-  const [days, setDays] = useState(fallbackDoctorProfile.availableDays);
-  const [slots, setSlots] = useState(fallbackDoctorProfile.availableSlots);
+  const { token, user } = useAuth();
+  const [doctor, setDoctor] = useState(null);
+  const [days, setDays] = useState([]);
+  const [slots, setSlots] = useState([]);
 
   useEffect(() => {
-    if (!token) return;
-    apiFetch("/doctors/me", { token })
-      .then((profile) => {
-        setDoctor(normalizeDoctor(profile));
-        setDays(normalizeDoctor(profile).availableDays || []);
-        setSlots(normalizeDoctor(profile).availableSlots || []);
+    if (!token || !user) return;
+    apiFetch(`/doctors/${user._id}`, { token })
+      .then((data) => {
+        const normalized = normalizeDoctor(data);
+        setDoctor(normalized);
+        setDays(normalized.availableDays || []);
+        setSlots(normalized.availableSlots || []);
       })
-      .catch(() => {});
-  }, [token]);
+      .catch(() => setDoctor(null));
+  }, [token, user]);
 
   const addValue = (event, setter, current) => {
     event.preventDefault();
