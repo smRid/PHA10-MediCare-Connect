@@ -21,6 +21,15 @@ function personName(value, fallback = "Unknown") {
   return value.name || value.doctorName || fallback;
 }
 
+export function normalizeUser(user) {
+  if (!user) return user;
+  return {
+    ...user,
+    _id: user._id || user.id,
+    name: user.name || "Unknown",
+  };
+}
+
 export function normalizeDoctor(doctor) {
   if (!doctor) return doctor;
 
@@ -141,3 +150,14 @@ export const getPrescriptions = (token) => {
     collectionFromPayload(items, "prescriptions").map(normalizePrescription),
   );
 };
+
+export const getUsers = (token) => {
+  return apiFetch("/users", { token, cache: "no-store" }).then((items) =>
+    collectionFromPayload(items, "users").map(normalizeUser),
+  );
+};
+
+export const deleteUser = (id, token) => {
+  return apiFetch(`/users/${id}`, { method: "DELETE", token });
+};
+
