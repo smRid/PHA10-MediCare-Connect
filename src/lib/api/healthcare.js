@@ -169,3 +169,10 @@ export const updateDoctorVerification = (id, status, token) => {
   }).then(normalizeDoctor);
 };
 
+export const getAnalytics = (token) => {
+  return apiFetch("/analytics", { token, cache: "no-store" }).then((payload) => ({
+    ...payload,
+    topDoctors: collectionFromPayload(payload, "topDoctors").map(normalizeDoctor),
+  }));
+};
+
