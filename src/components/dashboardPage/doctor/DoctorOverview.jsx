@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { CalendarCheck, MessageSquareHeart, Users } from "lucide-react";
-import { getAppointments } from "@/lib/api/healthcare";
+import { getAppointments, getDoctorById } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import StatCard from "@/components/dashboardPage/StatCard";
 import StatusPill from "@/components/shared/StatusPill";
 import { formatDate } from "@/lib/utils";
-import { getDoctorStats, getDoctorById } from "./doctor-utils";
+import { getDoctorStats } from "./doctor-utils";
 
 export default function DoctorOverview() {
   const { token, user } = useAuth();

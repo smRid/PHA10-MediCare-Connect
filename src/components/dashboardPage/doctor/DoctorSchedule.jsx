@@ -49,6 +49,8 @@ export default function DoctorSchedule() {
     }
   };
 
+  if (!doctor) return null;
+
   return (
     <section className="rounded-lg border border-border bg-card p-5">
       <p className="text-sm font-bold uppercase tracking-[0.18em] text-primary">

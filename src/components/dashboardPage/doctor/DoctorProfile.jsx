@@ -50,6 +50,8 @@ export default function DoctorProfile() {
     }
   };
 
+  if (!doctor) return null;
+
   return (
     <section className="rounded-lg border border-border bg-card p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
