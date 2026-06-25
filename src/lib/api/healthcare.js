@@ -161,6 +161,14 @@ export const deleteUser = (id, token) => {
   return apiFetch(`/users/${id}`, { method: "DELETE", token });
 };
 
+export const updateUser = (id, payload, token) => {
+  return apiFetch(`/users/${id}`, {
+    method: "PATCH",
+    token,
+    body: payload,
+  }).then(normalizeUser);
+};
+
 export const updateDoctorVerification = (id, status, token) => {
   return apiFetch(`/doctors/${id}/verification`, {
     method: "PATCH",
