@@ -1,14 +1,22 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Activity, Users, ShieldCheck, Star } from "lucide-react";
 import SectionHeading from "@/components/shared/SectionHeading";
+import { getStats } from "@/lib/api/healthcare";
 
 export default function AdminOverview() {
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    getStats().then(setStats).catch(console.error);
+  }, []);
+
   const metrics = [
-    { label: "Total Patients", value: "...", icon: Users },
-    { label: "Verified Doctors", value: "...", icon: ShieldCheck },
-    { label: "Appointments", value: "...", icon: Activity },
-    { label: "Total Reviews", value: "...", icon: Star },
+    { label: "Total Patients", value: stats?.patients ?? "...", icon: Users },
+    { label: "Verified Doctors", value: stats?.doctors ?? "...", icon: ShieldCheck },
+    { label: "Appointments", value: stats?.appointments ?? "...", icon: Activity },
+    { label: "Total Reviews", value: stats?.reviews ?? "...", icon: Star },
   ];
 
   return (
