@@ -1,3 +1,54 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { ArrowRight, HeartPulse } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { getStats } from "@/lib/api/healthcare";
+import Button from "@/components/ui/Button";
+
+function compactNumber(value) {
+  return new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(Number(value || 0));
+}
+
+const heroSlides = [
+  {
+    src: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=1200",
+    alt: "Doctor with patient",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=1200",
+    alt: "Hospital tech",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1638202993928-7267aad84c31?auto=format&fit=crop&q=80&w=1200",
+    alt: "Healthcare pros",
+  },
+];
+
+export default function HeroSection() {
+  const [stats, setStats] = useState({
+    totalAppointments: 0,
+    totalDoctors: 0,
+    totalPatients: 0,
+  });
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  useEffect(() => {
+    getStats()
+      .then((data) =>
+        setStats(
+          data || { totalAppointments: 0, totalDoctors: 0, totalPatients: 0 },
+        ),
+      )
+      .catch(() => {});
+
+    const timer = setInterval(() => {
+      setActiveSlide((current) => (current + 1) % heroSlides.length);
+    }, 4500);
 
     return () => clearInterval(timer);
   }, []);

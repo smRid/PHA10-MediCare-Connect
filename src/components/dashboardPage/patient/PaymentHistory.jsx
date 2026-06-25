@@ -17,14 +17,6 @@ export default function PaymentHistory() {
       .catch(() => setPayments([]));
   }, [token]);
 
-      appointmentId: item._id,
-      amount: item.amount,
-      transactionId: "demo_txn_patient",
-      status: "paid",
-      paymentDate: item.appointmentDate,
-    }));
-  const rows = payments.length ? payments : fallback;
-
   return (
     <section className="rounded-lg border border-border bg-card p-5">
       <p className="text-sm font-bold uppercase tracking-[0.18em] text-primary">
@@ -46,13 +38,13 @@ export default function PaymentHistory() {
             </tr>
           </thead>
           <tbody>
-            {rows.map((payment) => (
+            {payments.map((payment) => (
               <tr key={payment._id} className="border-b border-border/70">
                 <td className="py-3 pr-4 font-mono text-xs">
                   {payment.appointmentId}
                 </td>
                 <td className="py-3 pr-4 font-mono text-xs">
-                  {payment.transactionId}
+                  {payment.transactionId || "txn_placeholder"}
                 </td>
                 <td className="py-3 pr-4 font-semibold">
                   {currency(payment.amount)}
@@ -61,7 +53,7 @@ export default function PaymentHistory() {
                   {formatDate(payment.paymentDate || payment.createdAt)}
                 </td>
                 <td className="py-3 pr-4">
-                  <StatusPill status={payment.status} />
+                  <StatusPill status={payment.status || "paid"} />
                 </td>
               </tr>
             ))}

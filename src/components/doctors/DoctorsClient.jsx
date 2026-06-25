@@ -100,10 +100,18 @@ export default function DoctorsClient() {
     [page, search, sort, specialization],
   );
 
-          const haystack =
-            `${doctor.doctorName} ${doctor.specialization}`.toLowerCase();
-          return haystack.includes(search.toLowerCase());
-        });
+  useEffect(() => {
+    setLoading(true);
+    getDoctors(params)
+      .then((res) => {
+        let filtered = res.doctors || [];
+        if (search) {
+          filtered = filtered.filter((doctor) => {
+            const haystack =
+              `${doctor.doctorName} ${doctor.specialization}`.toLowerCase();
+            return haystack.includes(search.toLowerCase());
+          });
+        }
         if (specialization) {
           filtered = filtered.filter(
             (doctor) => doctor.specialization === specialization,
@@ -119,7 +127,7 @@ export default function DoctorsClient() {
           filtered.sort((a, b) => b.experience - a.experience);
         }
         if (sort === "rating") {
-          filtered.sort((a, b) => b.ratingAverage - a.ratingAverage);
+          filtered.sort((a, b) => (b.ratingAverage || 0) - (a.ratingAverage || 0));
         }
         setData({
           doctors: filtered,
@@ -128,6 +136,7 @@ export default function DoctorsClient() {
           perPage: 9,
         });
       })
+      .catch(() => setData({ doctors: [], total: 0, page: 1, perPage: 9 }))
       .finally(() => setLoading(false));
   }, [params, search, sort, specialization]);
 
