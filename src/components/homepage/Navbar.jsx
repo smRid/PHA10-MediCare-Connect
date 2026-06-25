@@ -164,6 +164,8 @@ function UserMenuSkeleton() {
 }
 
 function UserMenu({ user, open, onToggle, onClose, onLogout, align = "right" }) {
+  const firstName = user.name?.trim().split(/\s+/)[0] || "Profile";
+
   return (
     <div className="relative">
       <button
@@ -183,7 +185,7 @@ function UserMenu({ user, open, onToggle, onClose, onLogout, align = "right" }) 
             initials(user.name)
           )}
         </span>
-        <span className="min-w-0 truncate">{user.name}</span>
+        <span className="min-w-0 truncate">{firstName}</span>
         <ChevronDown
           className={cn("size-4 shrink-0 transition", open && "rotate-180")}
         />
