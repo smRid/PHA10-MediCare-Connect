@@ -1,12 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getDoctors } from "@/lib/api/healthcare";
+import { toast } from "react-toastify";
+import { CheckCircle, XCircle } from "lucide-react";
+import { getDoctors, updateDoctorVerification } from "@/lib/api/healthcare";
+import { useAuth } from "@/lib/auth-context";
 import SectionHeading from "@/components/shared/SectionHeading";
 import StatusPill from "@/components/shared/StatusPill";
+import Button from "@/components/ui/Button";
 import LoadingState from "@/components/shared/LoadingState";
 
 export default function ManageDoctors() {
+  const { token } = useAuth();
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -16,6 +21,21 @@ export default function ManageDoctors() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
+
+  const handleUpdateStatus = async (doctorId, status) => {
+    if (!token) return;
+    try {
+      await updateDoctorVerification(doctorId, status, token);
+      setDoctors((current) =>
+        current.map((doc) =>
+          doc._id === doctorId ? { ...doc, verificationStatus: status } : doc,
+        ),
+      );
+      toast.success(`Doctor marked as ${status}`);
+    } catch (error) {
+      toast.error(error.message || "Failed to update status");
+    }
+  };
 
   if (loading) return <LoadingState label="Loading doctors" />;
 
@@ -48,7 +68,18 @@ export default function ManageDoctors() {
                     <StatusPill status={doctor.verificationStatus || "verified"} />
                   </td>
                   <td className="px-4 py-3 text-right">
-                    {/* Action buttons implemented in next commit */}
+                    <div className="flex justify-end gap-2">
+                      {doctor.verificationStatus !== "verified" && (
+                        <Button variant="outline" size="sm" className="text-green-600 hover:bg-green-50 hover:text-green-700" onClick={() => handleUpdateStatus(doctor._id, "verified")} title="Verify Doctor">
+                          <CheckCircle className="size-4" />
+                        </Button>
+                      )}
+                      {doctor.verificationStatus !== "rejected" && (
+                        <Button variant="outline" size="sm" className="text-red-500 hover:bg-red-50 hover:text-red-600" onClick={() => handleUpdateStatus(doctor._id, "rejected")} title="Reject Verification">
+                          <XCircle className="size-4" />
+                        </Button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
