@@ -161,3 +161,11 @@ export const deleteUser = (id, token) => {
   return apiFetch(`/users/${id}`, { method: "DELETE", token });
 };
 
+export const updateDoctorVerification = (id, status, token) => {
+  return apiFetch(`/doctors/${id}/verification`, {
+    method: "PATCH",
+    token,
+    body: { verificationStatus: status },
+  }).then(normalizeDoctor);
+};
+
