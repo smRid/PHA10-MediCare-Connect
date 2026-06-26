@@ -88,6 +88,88 @@ function SpecializationFilter({ value, onChange }) {
   );
 }
 
+function SortFilter({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+  
+  const options = [
+    { value: "rating", label: "Highest Rating" },
+    { value: "experience", label: "Years of Experience" },
+    { value: "fee_asc", label: "Fee (Low to High)" },
+    { value: "fee_desc", label: "Fee (High to Low)" },
+  ];
+  
+  const selectedLabel = options.find((opt) => opt.value === value)?.label || "Highest Rating";
+
+  useEffect(() => {
+    const closeOnOutsideClick = (event) => {
+      if (!menuRef.current?.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
+  }, []);
+
+  return (
+    <div ref={menuRef} className="relative">
+      <button
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className="flex w-full items-center justify-between gap-3 rounded-xl border border-border/50 bg-background/50 py-3 pl-4 pr-3 text-left text-sm font-medium outline-none transition-all focus:border-primary/50 focus:bg-background focus:ring-4 focus:ring-primary/10 hover:bg-background"
+      >
+        <span className="truncate">{selectedLabel}</span>
+        <ChevronDown
+          className={`size-4 shrink-0 text-muted-foreground transition-transform duration-300 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            role="listbox"
+            className="specialization-scrollbar absolute left-0 right-0 top-[calc(100%+0.5rem)] z-40 max-h-64 overflow-y-auto rounded-xl border border-border/50 bg-card/95 p-1.5 shadow-xl shadow-black/10 backdrop-blur-xl"
+          >
+            {options.map((item) => {
+              const selected = item.value === value;
+
+              return (
+                <button
+                  key={item.value}
+                  type="button"
+                  role="option"
+                  aria-selected={selected}
+                  onClick={() => {
+                    onChange(item.value);
+                    setOpen(false);
+                  }}
+                  className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                    selected
+                      ? "bg-primary text-primary-foreground"
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <span className="truncate">{item.label}</span>
+                  {selected && <Check className="size-4 shrink-0" />}
+                </button>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function DoctorsClient() {
   const [search, setSearch] = useState("");
   const [specialization, setSpecialization] = useState("");
@@ -201,19 +283,7 @@ export default function DoctorsClient() {
 
               <div className="grid gap-2.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Sort By</label>
-                <div className="relative">
-                  <select
-                    value={sort}
-                    onChange={(event) => setSort(event.target.value)}
-                    className="w-full appearance-none rounded-xl border border-border/50 bg-background/50 py-3 pl-4 pr-10 text-sm font-medium outline-none transition-all focus:border-primary/50 focus:bg-background focus:ring-4 focus:ring-primary/10"
-                  >
-                    <option value="rating">Highest Rating</option>
-                    <option value="experience">Years of Experience</option>
-                    <option value="fee_asc">Fee (Low to High)</option>
-                    <option value="fee_desc">Fee (High to Low)</option>
-                  </select>
-                  <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                </div>
+                <SortFilter value={sort} onChange={setSort} />
               </div>
             </div>
           </aside>
