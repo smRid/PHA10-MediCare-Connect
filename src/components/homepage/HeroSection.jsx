@@ -142,13 +142,13 @@ export default function HeroSection() {
           transition={{ duration: 0.7, delay: 0.12, ease: "easeOut" }}
           className="relative lg:ml-auto w-full mt-6 lg:mt-0"
         >
-          <div className="relative overflow-hidden rounded-[2rem] border border-border/50 bg-card shadow-2xl shadow-primary/20 ring-1 ring-white/5">
-            <AnimatePresence mode="wait">
+          <div className="relative overflow-hidden rounded-[2rem] border border-border/50 bg-card shadow-2xl shadow-primary/20 ring-1 ring-white/5 h-[350px] sm:h-[450px] lg:h-[600px]">
+            <AnimatePresence>
               <motion.img
                 key={heroSlides[activeSlide].src}
                 src={heroSlides[activeSlide].src}
                 alt={heroSlides[activeSlide].alt}
-                className="h-[350px] sm:h-[450px] lg:h-[600px] w-full object-cover"
+                className="absolute inset-0 h-full w-full object-cover"
                 initial={{ opacity: 0, scale: 1.1, filter: "blur(8px)" }}
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                 exit={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }}
