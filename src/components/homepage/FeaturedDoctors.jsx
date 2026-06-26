@@ -75,39 +75,25 @@ export default function FeaturedDoctors() {
           </Link>
         </div>
         
-        <motion.div 
-          className="mt-12 grid gap-6 md:grid-cols-3"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.15 } }
-          }}
-        >
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
           {loading ? (
             Array(3).fill(0).map((_, i) => (
               <DoctorCardSkeleton key={i} />
             ))
           ) : (
-            doctors.map((doctor) => (
+            doctors.map((doctor, index) => (
               <motion.div
                 key={doctor._id}
-                variants={{
-                  hidden: { opacity: 0, y: 30, scale: 0.95 },
-                  visible: { 
-                    opacity: 1, 
-                    y: 0, 
-                    scale: 1,
-                    transition: { duration: 0.5, ease: "easeOut" } 
-                  }
-                }}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.15 }}
               >
                 <DoctorCard doctor={doctor} />
               </motion.div>
             ))
           )}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
