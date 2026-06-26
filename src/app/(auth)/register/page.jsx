@@ -42,27 +42,27 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="w-full max-w-xl rounded-2xl glass-card border border-border/50 p-8 shadow-2xl shadow-primary/5 animate-fade-in">
-      <div className="mb-7 lg:hidden">
+    <div className="w-full max-w-xl rounded-2xl glass-card border border-border/50 p-6 sm:p-8 shadow-2xl shadow-primary/5 animate-fade-in">
+      <div className="mb-5 lg:hidden">
         <BrandMark />
       </div>
-      <p className="text-sm font-bold uppercase tracking-[0.18em] text-primary">
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
         Register
       </p>
-      <h1 className="mt-2 font-heading text-3xl font-extrabold text-foreground">
+      <h1 className="mt-1.5 font-heading text-2xl sm:text-3xl font-extrabold text-foreground">
         Start your care workspace
       </h1>
-      <p className="mt-2 text-sm text-muted-foreground">
+      <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
         Doctors join unverified first. Admins can approve them from the dashboard.
       </p>
 
-      <div className="mt-6 grid grid-cols-2 gap-1 rounded-xl bg-muted/30 p-1 backdrop-blur-sm border border-border/50">
+      <div className="mt-5 grid grid-cols-2 gap-1 rounded-xl bg-muted/30 p-1 backdrop-blur-sm border border-border/50">
         {["patient", "doctor"].map((item) => (
           <button
             key={item}
             type="button"
             onClick={() => setRole(item)}
-            className={`rounded-lg px-3 py-2.5 text-sm font-semibold capitalize transition-all duration-300 ${
+            className={`rounded-lg px-3 py-2 text-sm font-semibold capitalize transition-all duration-300 ${
               role === item
                 ? "bg-card text-foreground shadow-md ring-1 ring-border/50 scale-[1.02]"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -73,8 +73,8 @@ export default function RegisterPage() {
         ))}
       </div>
 
-      <form onSubmit={submit} className="mt-8 grid gap-5">
-        <div className="grid gap-5 sm:grid-cols-2">
+      <form onSubmit={submit} className="mt-6 grid gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <Input name="name" label="Name" placeholder="Your full name" required />
           <Input
             name="email"
@@ -94,7 +94,7 @@ export default function RegisterPage() {
         />
 
         {role === "doctor" && (
-          <div className="grid gap-5 sm:grid-cols-2 animate-fade-down">
+          <div className="grid gap-4 sm:grid-cols-2 animate-fade-down">
             <Input
               name="specialization"
               label="Specialization"
@@ -125,7 +125,7 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <p className="mt-8 text-center text-sm text-muted-foreground">
+      <p className="mt-6 text-center text-xs sm:text-sm text-muted-foreground">
         Already registered?{" "}
         <Link href="/login" className="font-semibold text-primary transition-colors hover:text-primary/80 hover:underline">
           Sign in
