@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "@/components/homepage/Navbar";
 import Sidebar from "@/components/dashboardPage/Sidebar";
 import DashboardTopbar from "@/components/dashboardPage/DashboardTopbar";
@@ -37,15 +38,31 @@ export default function DashboardLayout({ children }) {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background">
+      <div className="relative min-h-screen bg-muted/20 overflow-hidden">
+        {/* Full-bleed ambient background for dashboard */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-sky-500/5 pointer-events-none" />
+        
         <Sidebar
           user={user}
           open={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
         />
-        <div className="min-h-screen lg:pl-64">
+        
+        <div className="relative z-10 min-h-screen lg:pl-64 flex flex-col">
           <DashboardTopbar user={user} onMenu={() => setSidebarOpen(true)} />
-          <main className="px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+          
+          <AnimatePresence mode="wait">
+            <motion.main
+              key={pathname}
+              initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -20, filter: "blur(4px)" }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="flex-1 px-4 py-8 sm:px-6 lg:px-8"
+            >
+              {children}
+            </motion.main>
+          </AnimatePresence>
         </div>
       </div>
     </>
