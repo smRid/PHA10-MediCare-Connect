@@ -114,27 +114,38 @@ const items = [
 
 export default function Specializations() {
   return (
-    <section className="bg-card/60 px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <section className="relative overflow-hidden bg-background px-4 py-20 sm:px-6 lg:px-8">
+      {/* Subtle section glow separator */}
+      <div className="absolute left-1/2 top-0 h-[400px] w-full max-w-4xl -translate-x-1/2 rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
+
+      <div className="relative z-10 mx-auto max-w-7xl">
         <SectionHeading
           align="center"
           eyebrow="Specializations"
           title="Browse by the care you need"
           description="Choose the right department quickly, from primary care to advanced diagnostics."
         />
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        
+        <div className="mt-14 columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
           {items.map(({ icon: Icon, label, text }) => (
             <article
               key={label}
-              className="group rounded-lg border border-border bg-background p-5 transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10"
+              className="group break-inside-avoid relative overflow-hidden rounded-2xl border border-border/50 glass-card p-6 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/15"
             >
-              <div className="flex items-center gap-4">
-                <span className="flex size-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
-                  <Icon className="size-6" />
+              {/* Decorative Internal Glow */}
+              <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-primary/10 to-transparent opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
+              
+              <div className="relative z-10 flex items-start gap-5">
+                <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-all duration-500 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-lg group-hover:shadow-primary/30">
+                  <Icon className="size-6 transition-transform duration-300 group-hover:rotate-12" />
                 </span>
-                <div>
-                  <h3 className="font-heading text-xl font-bold">{label}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{text}</p>
+                <div className="pt-1">
+                  <h3 className="font-heading text-lg font-extrabold text-foreground transition-colors duration-300 group-hover:text-primary">
+                    {label}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {text}
+                  </p>
                 </div>
               </div>
             </article>
