@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "@/components/homepage/Navbar";
 import Sidebar from "@/components/dashboardPage/Sidebar";
-import DashboardTopbar from "@/components/dashboardPage/DashboardTopbar";
 import LoadingState from "@/components/shared/LoadingState";
 import { useAuth } from "@/lib/auth-context";
 
@@ -49,7 +48,6 @@ export default function DashboardLayout({ children }) {
         />
         
         <div className="relative z-10 min-h-screen lg:pl-64 flex flex-col">
-          <DashboardTopbar user={user} onMenu={() => setSidebarOpen(true)} />
           
           <AnimatePresence mode="wait">
             <motion.main
