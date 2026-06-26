@@ -69,21 +69,21 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-2xl shadow-primary/10">
+    <div className="w-full max-w-md rounded-2xl glass-card border border-border/50 p-8 shadow-2xl shadow-primary/5 animate-fade-in">
       <div className="mb-7 lg:hidden">
         <BrandMark />
       </div>
       <p className="text-sm font-bold uppercase tracking-[0.18em] text-primary">
         Login
       </p>
-      <h1 className="mt-2 font-heading text-3xl font-extrabold">
+      <h1 className="mt-2 font-heading text-3xl font-extrabold text-foreground">
         Welcome back
       </h1>
       <p className="mt-2 text-sm text-muted-foreground">
         Access appointments, prescriptions, payments, and dashboard tools.
       </p>
 
-      <form onSubmit={submit} className="mt-6 grid gap-4">
+      <form onSubmit={submit} className="mt-8 grid gap-5">
         <Input
           name="email"
           label="Email"
@@ -97,23 +97,23 @@ export default function LoginPage() {
           placeholder="••••••••"
           required
         />
-        <Button type="submit" size="lg" disabled={loading}>
+        <Button type="submit" size="lg" disabled={loading} className="mt-2">
           <LogIn className="size-4" />
           {loading ? "Signing in..." : "Sign In"}
         </Button>
       </form>
 
-      <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
-        <span className="h-px flex-1 bg-border" />
+      <div className="my-6 flex items-center gap-3 text-xs font-medium text-muted-foreground uppercase tracking-widest">
+        <span className="h-px flex-1 bg-border/80" />
         or
-        <span className="h-px flex-1 bg-border" />
+        <span className="h-px flex-1 bg-border/80" />
       </div>
 
       <div className="grid gap-3">
         <select
           value={role}
           onChange={(event) => setRole(event.target.value)}
-          className="h-10 rounded-lg border border-input bg-background px-3 text-sm outline-none focus:border-primary"
+          className="h-11 rounded-xl border border-input bg-card/50 px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
         >
           <option value="patient">Google as patient</option>
           <option value="doctor">Google as doctor</option>
@@ -123,15 +123,16 @@ export default function LoginPage() {
           size="lg"
           onClick={handleGoogle}
           disabled={loading}
+          className="h-11"
         >
           <BadgeCheck className="size-4" />
           Continue with Google
         </Button>
       </div>
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <p className="mt-8 text-center text-sm text-muted-foreground">
         New here?{" "}
-        <Link href="/register" className="font-semibold text-primary hover:underline">
+        <Link href="/register" className="font-semibold text-primary transition-colors hover:text-primary/80 hover:underline">
           Create an account
         </Link>
       </p>
