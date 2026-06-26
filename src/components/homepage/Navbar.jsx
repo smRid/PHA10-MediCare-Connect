@@ -238,9 +238,15 @@ function UserMenu({ user, open, onToggle, onClose, onLogout, align = "right" }) 
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        className="flex h-12 max-w-[220px] items-center gap-3 rounded-full bg-muted/80 px-3 pr-4 text-sm font-semibold text-foreground transition hover:bg-muted"
+        className={cn(
+          "flex h-12 max-w-[220px] items-center gap-3 rounded-full bg-muted/40 px-2 pr-4 text-sm font-semibold text-foreground transition-all duration-300 hover:bg-muted/80",
+          open && "bg-muted/80 ring-2 ring-primary/20"
+        )}
       >
-        <span className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-primary/10 text-sm font-bold text-primary">
+        <span className={cn(
+          "flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 bg-primary/10 text-sm font-bold text-primary transition-colors duration-300",
+          open ? "border-primary" : "border-transparent"
+        )}>
           {user.photo ? (
             <img
               src={user.photo}
@@ -253,27 +259,27 @@ function UserMenu({ user, open, onToggle, onClose, onLogout, align = "right" }) 
         </span>
         <span className="min-w-0 truncate">{firstName}</span>
         <ChevronDown
-          className={cn("size-4 shrink-0 transition", open && "rotate-180")}
+          className={cn("size-4 shrink-0 transition-transform duration-300", open && "rotate-180 text-primary")}
         />
       </button>
 
       {open && (
         <div
           className={cn(
-            "absolute top-14 z-50 w-60 rounded-lg border border-border bg-card p-4 shadow-2xl shadow-black/15",
-            align === "right" ? "right-0" : "left-0",
+            "absolute top-14 z-50 w-64 rounded-2xl border border-border bg-card/95 p-2 shadow-xl shadow-primary/5 backdrop-blur-xl animate-scale-in",
+            align === "right" ? "right-0 origin-top-right" : "left-0 origin-top-left",
           )}
         >
-          <div className="border-b border-border pb-3">
+          <div className="border-b border-border/50 px-3 py-3 mb-2">
             <p className="truncate text-sm font-bold">{user.name}</p>
             <p className="truncate text-xs text-muted-foreground">{user.email}</p>
           </div>
 
-          <div className="grid gap-1 pt-3">
+          <div className="grid gap-1">
             <Link
               href="/dashboard/profile"
               onClick={onClose}
-              className="flex items-center gap-3 rounded-lg px-2 py-2 text-sm font-medium text-foreground transition hover:bg-muted"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-all duration-200 hover:bg-primary/10 hover:text-primary"
             >
               <User className="size-4" />
               My profile
@@ -281,7 +287,7 @@ function UserMenu({ user, open, onToggle, onClose, onLogout, align = "right" }) 
             <button
               type="button"
               onClick={onLogout}
-              className="flex items-center gap-3 rounded-lg px-2 py-2 text-left text-sm font-medium text-destructive transition hover:bg-destructive/10"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-destructive transition-all duration-200 hover:bg-destructive/10 hover:pl-4"
             >
               <LogOut className="size-4" />
               Sign out
