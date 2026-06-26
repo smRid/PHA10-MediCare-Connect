@@ -3,9 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, HeartPulse } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { getStats } from "@/lib/api/healthcare";
 import Button from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 function compactNumber(value) {
   return new Intl.NumberFormat("en-US", {
@@ -142,19 +143,18 @@ export default function HeroSection() {
           transition={{ duration: 0.7, delay: 0.12, ease: "easeOut" }}
           className="relative lg:ml-auto w-full mt-6 lg:mt-0"
         >
-          <div className="relative overflow-hidden rounded-[2rem] border border-border/50 bg-card shadow-2xl shadow-primary/20 ring-1 ring-white/5 h-[350px] sm:h-[450px] lg:h-[600px]">
-            <AnimatePresence>
-              <motion.img
-                key={heroSlides[activeSlide].src}
-                src={heroSlides[activeSlide].src}
-                alt={heroSlides[activeSlide].alt}
-                className="absolute inset-0 h-full w-full object-cover"
-                initial={{ opacity: 0, scale: 1.1, filter: "blur(8px)" }}
-                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                exit={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          <div className="relative overflow-hidden rounded-[2rem] border border-border/50 bg-card shadow-2xl shadow-primary/20 ring-1 ring-white/5 h-[350px] sm:h-[450px] lg:h-[600px] bg-card/50">
+            {heroSlides.map((slide, index) => (
+              <img
+                key={slide.src}
+                src={slide.src}
+                alt={slide.alt}
+                className={cn(
+                  "absolute inset-0 h-full w-full object-cover transition-all duration-1000 ease-in-out",
+                  activeSlide === index ? "opacity-100 scale-100 blur-none z-10" : "opacity-0 scale-105 blur-sm z-0"
+                )}
               />
-            </AnimatePresence>
+            ))}
             
             <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent mix-blend-multiply pointer-events-none" />
             
