@@ -90,46 +90,47 @@ export default function HeroSection() {
           transition={{ duration: 0.65, ease: "easeOut" }}
           className="relative z-10"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-xs sm:text-sm font-semibold text-primary shadow-sm backdrop-blur-md">
-            <HeartPulse className="size-4 animate-pulse" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 text-[9px] sm:text-[10px] font-bold tracking-wide text-primary shadow-sm backdrop-blur-md uppercase">
+            <HeartPulse className="size-3 animate-pulse" />
             Live hospital appointment ecosystem
           </div>
-          <h1 className="mt-6 max-w-4xl font-heading text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-foreground">
-            Book trusted care before the <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-sky-500">waiting room fills up.</span>
+          <h1 className="mt-5 font-heading text-2xl font-extrabold leading-[1.15] tracking-tight sm:text-3xl lg:text-4xl text-foreground">
+            Book trusted care before the <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-sky-500">waiting room fills up.</span>
           </h1>
-          <p className="mt-4 sm:mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
+          <p className="mt-4 max-w-lg text-xs leading-relaxed text-muted-foreground sm:text-sm">
             MediCare Connect helps patients find verified doctors, pay securely,
             track appointments, and keep prescriptions connected to one calm
             healthcare workspace.
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4">
             <Link href="/find-doctors">
-              <Button size="lg" className="w-full sm:w-auto shadow-lg shadow-primary/20 transition-transform hover:scale-105">
+              <Button className="w-full sm:w-auto shadow-lg shadow-primary/20 transition-transform hover:scale-105">
                 Find Doctors
                 <ArrowRight className="size-4" />
               </Button>
             </Link>
             <Link href="/register">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto bg-card/50 backdrop-blur-sm transition-transform hover:scale-105">
+              <Button variant="outline" className="w-full sm:w-auto bg-card/50 backdrop-blur-sm transition-transform hover:scale-105">
                 Create Account
               </Button>
             </Link>
           </div>
 
-          <div className="mt-10 sm:mt-12 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+          <div className="mt-10 sm:mt-12 grid max-w-xl grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
             {metrics.map((item, index) => (
               <motion.div
                 key={item.label}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                className="glass-card rounded-2xl border border-border/50 p-4 sm:p-5 shadow-lg shadow-primary/5 transition-transform duration-300 hover:-translate-y-1 hover:shadow-primary/10"
+                className="glass-card rounded-2xl border border-border/50 p-3 shadow-lg shadow-primary/5 transition-transform duration-300 hover:-translate-y-1 hover:shadow-primary/10"
               >
-                <p className="font-heading text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary/60">
+                <p className="font-heading text-lg sm:text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary/60">
                   {item.value}
                 </p>
-                <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-medium text-muted-foreground leading-snug">
+                <p className="mt-1 text-[9px] sm:text-[10px] font-medium text-muted-foreground leading-snug">
                   {item.label}
                 </p>
               </motion.div>
@@ -143,7 +144,7 @@ export default function HeroSection() {
           transition={{ duration: 0.7, delay: 0.12, ease: "easeOut" }}
           className="relative lg:ml-auto w-full mt-6 lg:mt-0"
         >
-          <div className="relative overflow-hidden rounded-[2rem] border border-border/50 bg-card shadow-2xl shadow-primary/20 ring-1 ring-white/5 h-[350px] sm:h-[450px] lg:h-[600px] bg-card/50">
+          <div className="relative overflow-hidden rounded-[2rem] border border-border/50 bg-card shadow-2xl shadow-primary/20 ring-1 ring-white/5 h-[300px] sm:h-[350px] lg:h-[400px] bg-card/50">
             {heroSlides.map((slide, index) => (
               <img
                 key={slide.src}
