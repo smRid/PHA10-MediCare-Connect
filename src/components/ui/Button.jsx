@@ -6,21 +6,21 @@ import { cn } from "@/lib/utils";
 
 const variants = {
   primary:
-    "bg-gradient-to-br from-primary to-accent text-primary-foreground hover:opacity-90 shadow-lg shadow-primary/20 border border-primary/20",
+    "bg-gradient-to-br from-primary to-sky-600 text-white shadow-lg shadow-primary/20 border border-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:border-primary/40",
   secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
   outline:
-    "glass text-foreground hover:border-primary/50 hover:bg-primary/5",
-  ghost: "text-muted-foreground hover:bg-muted hover:text-foreground active:bg-muted/80",
-  danger: "bg-destructive text-white hover:opacity-90 shadow-lg shadow-destructive/20",
+    "glass-card text-foreground hover:border-primary/50 hover:bg-primary/10 hover:text-primary",
+  ghost: "text-muted-foreground hover:bg-muted/80 hover:text-foreground active:bg-muted",
+  danger: "bg-gradient-to-br from-destructive to-red-600 text-white shadow-lg shadow-destructive/20 hover:shadow-xl hover:shadow-destructive/30",
 };
 
 const sizes = {
   xs: "h-7 px-2.5 text-xs",
-  sm: "h-8 px-3 text-xs",
-  md: "h-10 px-4 text-sm",
-  lg: "h-12 px-5 text-base",
-  xl: "h-14 px-7 text-base",
-  icon: "size-10 p-0",
+  sm: "h-9 px-3.5 text-xs",
+  md: "h-11 px-5 text-sm",
+  lg: "h-12 px-6 text-base",
+  xl: "h-14 px-8 text-lg",
+  icon: "size-11 p-0",
 };
 
 export default function Button({
@@ -72,16 +72,21 @@ export default function Button({
       disabled={disabled || loading}
       onClick={handleClick}
       className={cn(
-        "relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+        "group relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-xl font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 disabled:pointer-events-none disabled:opacity-60 active:scale-[0.96]",
         variants[variant],
         sizes[size],
         className,
       )}
       {...props}
     >
+      {/* Dynamic Hover Glow Layer (only for primary/danger) */}
+      {(variant === "primary" || variant === "danger") && (
+         <span className="absolute inset-0 bg-white/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none mix-blend-overlay" />
+      )}
+      
       {isRippling && (
         <span
-          className="absolute block rounded-full bg-current opacity-30 animate-ripple pointer-events-none"
+          className="absolute block rounded-full bg-white opacity-40 animate-ripple pointer-events-none"
           style={{
             left: coords.x - 10,
             top: coords.y - 10,
@@ -90,7 +95,7 @@ export default function Button({
           }}
         />
       )}
-      {loading && <Loader2 className="size-4 animate-spin" />}
+      {loading && <Loader2 className="size-4 animate-spin shrink-0" />}
       {children}
     </button>
   );
