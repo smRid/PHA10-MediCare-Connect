@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, LogOut, Menu, User, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { mainNavLinks } from "@/constants/nav-links";
 import { useAuth } from "@/lib/auth-context";
 import { cn, initials } from "@/lib/utils";
@@ -15,6 +15,13 @@ export default function Navbar() {
   const { user, loading, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const closeMenus = () => {
     setOpen(false);
@@ -34,10 +41,10 @@ export default function Navbar() {
           href={link.href}
           onClick={closeMenus}
           className={cn(
-            "rounded-lg px-3 py-2 text-sm font-semibold transition",
+            "relative rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300",
             pathname === link.href
-              ? "bg-primary/10 text-primary"
-              : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              ? "bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-105"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-105",
           )}
         >
           {link.label}
@@ -46,7 +53,7 @@ export default function Navbar() {
       <Link
         href={user ? `/dashboard/${user.role}` : "/login"}
         onClick={closeMenus}
-        className="rounded-lg px-3 py-2 text-sm font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground"
+        className="rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground transition-all duration-300 hover:bg-muted hover:text-foreground hover:scale-105"
       >
         Dashboard
       </Link>
@@ -54,13 +61,20 @@ export default function Navbar() {
   );
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-card/88 backdrop-blur-xl">
+    <header 
+      className={cn(
+        "sticky top-0 z-50 transition-all duration-300 border-b",
+        scrolled 
+          ? "glass-nav shadow-sm" 
+          : "bg-transparent border-transparent"
+      )}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" aria-label="MediCare Connect home">
+        <Link href="/" aria-label="MediCare Connect home" className="transition-transform hover:scale-105">
           <BrandMark />
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
+        <nav className="hidden items-center gap-2 md:flex" aria-label="Main navigation">
           {links}
         </nav>
 
