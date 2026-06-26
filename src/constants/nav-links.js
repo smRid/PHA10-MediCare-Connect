@@ -47,7 +47,6 @@ const nav = {
       href: "/dashboard/patient/reviews",
       icon: MessageSquareText,
     },
-    { type: "link", label: "Profile", href: "/dashboard/profile", icon: Settings },
   ],
   doctor: [
     {
@@ -73,12 +72,6 @@ const nav = {
       label: "Prescriptions",
       href: "/dashboard/doctor/prescriptions",
       icon: FileHeart,
-    },
-    {
-      type: "link",
-      label: "Profile Management",
-      href: "/dashboard/doctor/profile",
-      icon: Stethoscope,
     },
   ],
   admin: [
@@ -118,7 +111,6 @@ const nav = {
       href: "/dashboard/admin/analytics",
       icon: BarChart3,
     },
-    { type: "link", label: "Profile", href: "/dashboard/profile", icon: UserCog },
   ],
 };
 

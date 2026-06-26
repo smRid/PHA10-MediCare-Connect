@@ -5,5 +5,9 @@ export const metadata = {
 };
 
 export default function ProfilePage() {
-  return <ProfileClient />;
+  return (
+    <main className="min-h-screen py-12 pt-24 px-4 sm:px-6 lg:px-8 bg-muted/20">
+      <ProfileClient />
+    </main>
+  );
 }

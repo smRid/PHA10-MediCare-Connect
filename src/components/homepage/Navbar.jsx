@@ -177,7 +177,7 @@ export default function Navbar() {
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <Link
-                  href="/dashboard/profile"
+                  href="/profile"
                   onClick={closeMenus}
                   className="flex h-10 items-center justify-center gap-2 rounded-lg bg-card border border-border text-sm font-semibold transition hover:bg-muted"
                 >
@@ -277,7 +277,7 @@ function UserMenu({ user, open, onToggle, onClose, onLogout, align = "right" }) 
 
           <div className="grid gap-1">
             <Link
-              href="/dashboard/profile"
+              href="/profile"
               onClick={onClose}
               className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-all duration-200 hover:bg-primary/10 hover:text-primary"
             >
