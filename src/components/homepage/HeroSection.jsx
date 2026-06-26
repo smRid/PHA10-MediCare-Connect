@@ -140,34 +140,36 @@ export default function HeroSection() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.12, ease: "easeOut" }}
-          className="relative"
+          className="relative lg:ml-auto w-full"
         >
-          <div className="relative overflow-hidden rounded-lg border border-border bg-card shadow-2xl shadow-primary/10">
+          <div className="relative overflow-hidden rounded-[2rem] border border-border/50 bg-card shadow-2xl shadow-primary/20 ring-1 ring-white/5">
             <AnimatePresence mode="wait">
               <motion.img
                 key={heroSlides[activeSlide].src}
                 src={heroSlides[activeSlide].src}
                 alt={heroSlides[activeSlide].alt}
-                className="h-[560px] w-full object-cover"
-                initial={{ opacity: 0, scale: 1.03 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.65, ease: "easeOut" }}
+                className="h-[500px] sm:h-[600px] w-full object-cover"
+                initial={{ opacity: 0, scale: 1.1, filter: "blur(8px)" }}
+                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                exit={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               />
             </AnimatePresence>
-            <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/8 to-transparent" />
-            <div className="absolute inset-x-4 bottom-4 flex items-center justify-center">
-              <div className="flex items-center gap-2 rounded-full border border-white/30 bg-background/75 px-3 py-2 backdrop-blur">
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent mix-blend-multiply pointer-events-none" />
+            
+            <div className="absolute inset-x-0 bottom-6 flex items-center justify-center">
+              <div className="flex items-center gap-2.5 rounded-full border border-border/50 bg-card/30 px-4 py-2.5 backdrop-blur-xl shadow-lg">
                 {heroSlides.map((slide, index) => (
                   <button
                     key={slide.src}
                     type="button"
                     aria-label={`Show healthcare image ${index + 1}`}
                     onClick={() => setActiveSlide(index)}
-                    className={`h-2 rounded-full transition-all ${
+                    className={`h-2.5 rounded-full transition-all duration-500 ease-out ${
                       activeSlide === index
-                        ? "w-7 bg-primary"
-                        : "w-2 bg-muted-foreground/45 hover:bg-muted-foreground"
+                        ? "w-8 bg-primary shadow-[0_0_12px_rgba(var(--primary),0.6)]"
+                        : "w-2.5 bg-foreground/30 hover:bg-foreground/50 hover:scale-110"
                     }`}
                   />
                 ))}
