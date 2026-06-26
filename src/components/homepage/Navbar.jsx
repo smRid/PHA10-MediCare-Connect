@@ -110,54 +110,106 @@ export default function Navbar() {
 
         <button
           type="button"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen((value) => !value)}
-          className="rounded-lg p-2 text-muted-foreground md:hidden"
+          aria-label="Open menu"
+          onClick={() => setOpen(true)}
+          className="rounded-lg p-2 text-muted-foreground transition hover:bg-muted md:hidden"
         >
-          {open ? <X className="size-5" /> : <Menu className="size-5" />}
+          <Menu className="size-5" />
         </button>
       </div>
 
+      {/* Mobile Drawer Overlay */}
+      {open && (
+        <div
+          className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm transition-opacity md:hidden animate-fade-in"
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Mobile Drawer Content */}
       <div
         className={cn(
-          "overflow-hidden border-t border-border bg-card transition-all md:hidden",
-          open ? "max-h-96" : "max-h-0",
+          "fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col border-l border-border bg-card shadow-2xl transition-transform duration-300 ease-in-out md:hidden",
+          open ? "translate-x-0" : "translate-x-full"
         )}
       >
-        <div className="grid gap-1 px-4 py-4">
-          {links}
-          <div className="mt-3 flex items-start gap-3">
+        <div className="flex h-16 items-center justify-between border-b border-border/50 px-4">
+          <BrandMark />
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="rounded-lg p-2 text-muted-foreground transition hover:bg-muted"
+            aria-label="Close menu"
+          >
+            <X className="size-5" />
+          </button>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto px-4 py-6">
+          <nav className="flex flex-col gap-3">
+            {links}
+          </nav>
+        </div>
+        
+        <div className="border-t border-border bg-muted/20 p-4">
+          <div className="mb-4 flex items-center justify-between rounded-lg border border-border bg-card p-3 shadow-sm">
+            <span className="text-sm font-semibold">Theme Preference</span>
             <ThemeToggle />
-            {loading ? (
-              <UserMenuSkeleton />
-            ) : user ? (
-              <UserMenu
-                user={user}
-                open={userMenuOpen}
-                onToggle={() => setUserMenuOpen((value) => !value)}
-                onClose={closeMenus}
-                onLogout={handleLogout}
-                align="left"
-              />
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  onClick={closeMenus}
-                  className="text-sm font-semibold"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/register"
-                  onClick={closeMenus}
-                  className="inline-flex h-10 items-center rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground"
-                >
-                  Register
-                </Link>
-              </>
-            )}
           </div>
+          
+          {loading ? (
+            <UserMenuSkeleton />
+          ) : user ? (
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-3">
+                <span className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-primary/10 text-sm font-bold text-primary">
+                  {user.photo ? (
+                    <img src={user.photo} alt={user.name} className="h-full w-full object-cover" />
+                  ) : (
+                    initials(user.name)
+                  )}
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-bold">{user.name}</p>
+                  <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  href="/dashboard/profile"
+                  onClick={closeMenus}
+                  className="flex h-10 items-center justify-center gap-2 rounded-lg bg-card border border-border text-sm font-semibold transition hover:bg-muted"
+                >
+                  <User className="size-4" /> Profile
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex h-10 items-center justify-center gap-2 rounded-lg bg-destructive/10 text-sm font-semibold text-destructive transition hover:bg-destructive/20"
+                >
+                  <LogOut className="size-4" /> Sign out
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              <Link
+                href="/login"
+                onClick={closeMenus}
+                className="flex h-10 items-center justify-center rounded-lg border border-input bg-card text-sm font-semibold transition hover:bg-muted hover:text-foreground"
+              >
+                Login
+              </Link>
+              <Link
+                href="/register"
+                onClick={closeMenus}
+                className="flex h-10 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90"
+              >
+                Register
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </header>
