@@ -72,52 +72,66 @@ export default function HeroSection() {
   );
 
   return (
-    <section className="relative overflow-hidden border-b border-border px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
-      <div className="absolute inset-0 medical-grid opacity-60" />
-      <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_0.95fr] lg:items-center">
+    <section className="relative overflow-hidden border-b border-border px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
+      {/* Ambient Background Layers */}
+      <div className="absolute inset-0 gradient-mesh opacity-80" />
+      <div className="absolute inset-0 noise-overlay opacity-30 mix-blend-overlay pointer-events-none" />
+      <div className="absolute inset-0 medical-grid opacity-30 mix-blend-color-burn dark:mix-blend-color-dodge pointer-events-none" />
+      
+      {/* Glowing Orbs */}
+      <div className="absolute -top-[20%] -left-[10%] h-[50%] w-[50%] rounded-full bg-primary/20 blur-[120px] animate-pulse pointer-events-none" />
+      <div className="absolute top-[20%] -right-[10%] h-[40%] w-[40%] rounded-full bg-sky-500/10 blur-[100px] animate-pulse anim-delay-500 pointer-events-none" />
+
+      <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_0.95fr] lg:items-center">
         <motion.div
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, ease: "easeOut" }}
+          className="relative z-10"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-2 text-sm font-semibold text-primary shadow-sm backdrop-blur">
-            <HeartPulse className="size-4" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-semibold text-primary shadow-sm backdrop-blur-md">
+            <HeartPulse className="size-4 animate-pulse" />
             Live hospital appointment ecosystem
           </div>
-          <h1 className="mt-6 max-w-4xl font-heading text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
-            Book trusted care before the waiting room fills up.
+          <h1 className="mt-6 max-w-4xl font-heading text-5xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl text-foreground">
+            Book trusted care before the <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-sky-500">waiting room fills up.</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
             MediCare Connect helps patients find verified doctors, pay securely,
             track appointments, and keep prescriptions connected to one calm
             healthcare workspace.
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row">
             <Link href="/find-doctors">
-              <Button size="lg">
+              <Button size="lg" className="w-full sm:w-auto shadow-lg shadow-primary/20 transition-transform hover:scale-105">
                 Find Doctors
                 <ArrowRight className="size-4" />
               </Button>
             </Link>
             <Link href="/register">
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto bg-card/50 backdrop-blur-sm transition-transform hover:scale-105">
                 Create Account
               </Button>
             </Link>
           </div>
 
-          <div className="mt-8 grid max-w-xl grid-cols-3 gap-3">
-            {metrics.map((item) => (
-              <div
+          <div className="mt-12 grid max-w-2xl grid-cols-3 gap-4">
+            {metrics.map((item, index) => (
+              <motion.div
                 key={item.label}
-                className="rounded-lg border border-border bg-card/80 p-3"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                className="glass-card rounded-2xl border border-border/50 p-5 shadow-lg shadow-primary/5 transition-transform duration-300 hover:-translate-y-1 hover:shadow-primary/10"
               >
-                <p className="font-heading text-xl font-extrabold text-primary">
+                <p className="font-heading text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary/60">
                   {item.value}
                 </p>
-                <p className="mt-1 text-xs text-muted-foreground">{item.label}</p>
-              </div>
+                <p className="mt-2 text-sm font-medium text-muted-foreground leading-snug">
+                  {item.label}
+                </p>
+              </motion.div>
             ))}
           </div>
         </motion.div>
