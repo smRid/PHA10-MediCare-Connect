@@ -52,11 +52,11 @@ export default function DashboardTopbar({ user, onMenu }) {
           </div>
           
           <div className="flex items-center gap-3 border-l border-border/50 pl-3 sm:pl-4">
-            <button className="group relative flex size-10 items-center justify-center rounded-full border border-border/50 bg-card text-muted-foreground transition-all duration-300 hover:border-border hover:bg-muted hover:text-foreground hover:shadow-md">
+            <button aria-label="Notifications" className="group relative flex size-10 items-center justify-center rounded-full border border-border/50 bg-card text-muted-foreground transition-all duration-300 hover:border-border hover:bg-muted hover:text-foreground hover:shadow-md">
               <Bell className="size-4 transition-transform duration-300 group-hover:rotate-12" />
               <span className="absolute right-2.5 top-2.5 size-2 rounded-full bg-red-500 ring-2 ring-card animate-pulse" />
             </button>
-            <button className="flex size-10 items-center justify-center overflow-hidden rounded-full border border-primary/20 bg-primary/10 ring-2 ring-transparent transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20 hover:ring-primary/20">
+            <button aria-label="User profile menu" className="flex size-10 items-center justify-center overflow-hidden rounded-full border border-primary/20 bg-primary/10 ring-2 ring-transparent transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20 hover:ring-primary/20">
               {user.photo ? (
                 <img src={user.photo} alt={user.name || "User avatar"} className="h-full w-full object-cover" />
               ) : (

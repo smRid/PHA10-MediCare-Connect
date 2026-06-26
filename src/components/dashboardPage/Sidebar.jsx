@@ -11,7 +11,7 @@ export default function Sidebar({ user, open, onClose }) {
   const nav = getNavByRole(user.role);
 
   const aside = (
-    <aside className="flex h-full w-64 flex-col border-r border-border/50 bg-card/60 backdrop-blur-xl shadow-xl shadow-primary/5">
+    <aside aria-label="Sidebar navigation" className="flex h-full w-64 flex-col border-r border-border/50 bg-card/60 backdrop-blur-xl shadow-xl shadow-primary/5">
       <nav className="flex-1 overflow-y-auto p-4">
         <ul className="grid gap-1.5 relative">
           {nav.map(({ href, label, icon: Icon }) => {
@@ -33,6 +33,7 @@ export default function Sidebar({ user, open, onClose }) {
                 <Link
                   href={href}
                   onClick={onClose}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
                     "relative z-10 flex h-11 items-center gap-3 rounded-xl px-4 text-sm font-semibold transition-all duration-300",
                     active
@@ -64,6 +65,7 @@ export default function Sidebar({ user, open, onClose }) {
           open ? "opacity-100" : "pointer-events-none opacity-0",
         )}
         onClick={onClose}
+        aria-hidden="true"
       >
         <div
           className={cn(
