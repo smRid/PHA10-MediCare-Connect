@@ -60,10 +60,6 @@ export default function ProfileClient() {
                       <UserIcon className="size-10" />
                     </div>
                   )}
-                  {/* Decorative overlay for future photo upload feature */}
-                  <div className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/40 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
-                    <Camera className="size-6 text-white" />
-                  </div>
                </div>
                
                <div className="text-center sm:text-left">

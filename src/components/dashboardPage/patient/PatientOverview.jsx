@@ -3,24 +3,35 @@
 import { useEffect, useMemo, useState } from "react";
 import { CalendarClock, CreditCard, Heart, History } from "lucide-react";
 import { motion } from "framer-motion";
-import { getAppointments, getPayments } from "@/lib/api/healthcare";
+import { getAppointments, getPayments, getReviews } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import StatCard from "@/components/dashboardPage/StatCard";
 import StatusPill from "@/components/shared/StatusPill";
 import { currency, formatDate } from "@/lib/utils";
 
 export default function PatientOverview() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [appointments, setAppointments] = useState([]);
   const [payments, setPayments] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [loadingUpcoming, setLoadingUpcoming] = useState(true);
 
   useEffect(() => {
     if (!token) return;
+    setLoadingUpcoming(true);
     getAppointments(token)
       .then(setAppointments)
-      .catch(() => setAppointments([]));
+      .catch(() => setAppointments([]))
+      .finally(() => setLoadingUpcoming(false));
+      
     getPayments(token).then(setPayments).catch(() => setPayments([]));
-  }, [token]);
+
+    if (user?._id) {
+      getReviews({ patientId: user._id })
+        .then(setReviews)
+        .catch(() => setReviews([]));
+    }
+  }, [token, user]);
 
   const upcoming = appointments.filter((item) =>
     ["requested", "accepted", "rescheduled"].includes(item.appointmentStatus),
@@ -41,7 +52,7 @@ export default function PatientOverview() {
           { icon: CalendarClock, label: "Upcoming Appointments", value: upcoming.length, helper: "Confirmed or waiting" },
           { icon: History, label: "Appointment History", value: appointments.length, helper: "All records" },
           { icon: CreditCard, label: "Total Payments", value: currency(paidTotal), helper: "Paid consultations" },
-          { icon: Heart, label: "Favorite Doctors", value: 0, helper: "Tracked favorites" },
+          { icon: Star, label: "Total Reviews", value: reviews.length, helper: "Reviews left by you" },
         ].map((metric, index) => (
           <motion.div
             key={index}
@@ -88,28 +99,17 @@ export default function PatientOverview() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border/50">
-              {upcoming.map((item, i) => (
-                <motion.tr 
-                  key={item._id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + i * 0.1, duration: 0.5 }}
-                  className="group transition-colors hover:bg-muted/30"
-                >
-                  <td className="py-4 pr-4">
-                    <div className="font-bold text-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.doctorName}</div>
-                  </td>
-                  <td className="py-4 pr-4 font-medium text-muted-foreground">{formatDate(item.appointmentDate)}</td>
-                  <td className="py-4 pr-4 font-medium text-muted-foreground">{item.appointmentTime}</td>
-                  <td className="py-4 pr-4">
-                    <StatusPill status={item.paymentStatus} />
-                  </td>
-                  <td className="py-4 pr-4">
-                    <StatusPill status={item.appointmentStatus} />
-                  </td>
-                </motion.tr>
-              ))}
-              {upcoming.length === 0 && (
+              {loadingUpcoming ? (
+                Array.from({ length: 3 }).map((_, i) => (
+                  <tr key={`skeleton-${i}`} className="animate-pulse border-b border-border/50">
+                    <td className="py-4 pr-4"><div className="h-4 w-32 bg-muted/40 rounded"></div></td>
+                    <td className="py-4 pr-4"><div className="h-4 w-24 bg-muted/40 rounded"></div></td>
+                    <td className="py-4 pr-4"><div className="h-4 w-20 bg-muted/40 rounded"></div></td>
+                    <td className="py-4 pr-4"><div className="h-6 w-16 bg-muted/40 rounded-full"></div></td>
+                    <td className="py-4 pr-4"><div className="h-6 w-20 bg-muted/40 rounded-full"></div></td>
+                  </tr>
+                ))
+              ) : upcoming.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-12 text-center">
                     <div className="inline-flex items-center justify-center rounded-2xl border border-dashed border-border/50 px-8 py-6 text-sm font-medium text-muted-foreground">
@@ -117,6 +117,28 @@ export default function PatientOverview() {
                     </div>
                   </td>
                 </tr>
+              ) : (
+                upcoming.map((item, i) => (
+                  <motion.tr 
+                    key={item._id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + i * 0.1, duration: 0.5 }}
+                    className="group transition-colors hover:bg-muted/30"
+                  >
+                    <td className="py-4 pr-4">
+                      <div className="font-bold text-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.doctorName}</div>
+                    </td>
+                    <td className="py-4 pr-4 font-medium text-muted-foreground">{formatDate(item.appointmentDate)}</td>
+                    <td className="py-4 pr-4 font-medium text-muted-foreground">{item.appointmentTime}</td>
+                    <td className="py-4 pr-4">
+                      <StatusPill status={item.paymentStatus} />
+                    </td>
+                    <td className="py-4 pr-4">
+                      <StatusPill status={item.appointmentStatus} />
+                    </td>
+                  </motion.tr>
+                ))
               )}
             </tbody>
           </table>
