@@ -10,7 +10,81 @@ import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import StatusPill from "@/components/shared/StatusPill";
+import CustomDropdown from "@/components/ui/CustomDropdown";
 import { currency, formatDate } from "@/lib/utils";
+
+const generateDates = (days) => {
+  const dates = [];
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const validDays = days?.length > 0 ? days.map(d => dayNames.indexOf(d)) : [0, 1, 2, 3, 4, 5, 6];
+  
+  let current = new Date();
+  current.setDate(current.getDate() + 1);
+
+  while (dates.length < 14) {
+    if (validDays.includes(current.getDay())) {
+      const dateString = current.toISOString().split("T")[0];
+      const label = current.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+      dates.push({ value: dateString, label });
+    }
+    current.setDate(current.getDate() + 1);
+  }
+  return dates;
+};
+
+function RescheduleForm({ item, onSave, onCancel }) {
+  const availableDatesOptions = generateDates(item.doctor?.availableDays || []);
+  
+  // If the currently booked date isn't in the options (e.g., today), add it so the dropdown doesn't appear empty
+  if (item.appointmentDate && !availableDatesOptions.find(opt => opt.value === item.appointmentDate)) {
+    const d = new Date(item.appointmentDate);
+    if (!isNaN(d.getTime())) {
+      availableDatesOptions.unshift({
+        value: item.appointmentDate,
+        label: d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
+      });
+    }
+  }
+
+  const availableTimeOptions = (item.doctor?.availableSlots || []).map(slot => ({ value: slot, label: slot }));
+  if (item.appointmentTime && !availableTimeOptions.find(opt => opt.value === item.appointmentTime)) {
+    availableTimeOptions.unshift({ value: item.appointmentTime, label: item.appointmentTime });
+  }
+
+  const [selectedDate, setSelectedDate] = useState(item.appointmentDate || (availableDatesOptions[0]?.value || ""));
+  const [selectedTime, setSelectedTime] = useState(item.appointmentTime || (availableTimeOptions[0]?.value || ""));
+
+  return (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSave({ date: selectedDate, time: selectedTime });
+      }}
+      className="mt-2 grid gap-3 rounded-xl border border-border/50 bg-muted/40 p-4 sm:grid-cols-[1fr_1fr_auto]"
+    >
+      <CustomDropdown
+        label="Date"
+        placeholder="Select a date"
+        icon={CalendarDays}
+        value={selectedDate}
+        onChange={setSelectedDate}
+        options={availableDatesOptions}
+      />
+      <CustomDropdown
+        label="Time"
+        placeholder="Select time"
+        icon={Clock}
+        value={selectedTime}
+        onChange={setSelectedTime}
+        options={availableTimeOptions}
+      />
+      <div className="flex gap-2">
+        <Button type="button" variant="outline" className="h-12 w-full sm:w-auto" onClick={onCancel}>Cancel</Button>
+        <Button type="submit" className="h-12 w-full sm:w-auto">Save</Button>
+      </div>
+    </form>
+  );
+}
 
 export default function PatientAppointments() {
   const { token } = useAuth();
@@ -142,27 +216,11 @@ export default function PatientAppointments() {
               </div>
 
               {editingId === item._id ? (
-                <form
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                    updateAppointment(
-                      item._id,
-                      {
-                        date: new FormData(event.currentTarget).get("appointmentDate"),
-                        time: new FormData(event.currentTarget).get("appointmentTime"),
-                      },
-                    );
-                  }}
-                  className="mt-2 grid gap-3 rounded-xl border border-border/50 bg-muted/40 p-4 sm:grid-cols-[1fr_1fr_auto]"
-                >
-                  <Input
-                    name="appointmentDate"
-                    type="date"
-                    defaultValue={item.appointmentDate}
-                  />
-                  <Input name="appointmentTime" defaultValue={item.appointmentTime} />
-                  <Button type="submit" className="w-full">Save Changes</Button>
-                </form>
+                <RescheduleForm
+                  item={item}
+                  onSave={(updates) => updateAppointment(item._id, updates)}
+                  onCancel={() => setEditingId(null)}
+                />
               ) : (
                 <div className="flex flex-wrap items-center gap-3 border-t border-border/50 pt-4 mt-1">
                   <Button variant="outline" className="h-9 px-4 text-xs" onClick={() => setEditingId(item._id)}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CalendarClock, CreditCard, Heart, History } from "lucide-react";
+import { CalendarClock, CreditCard, Star, History } from "lucide-react";
 import { motion } from "framer-motion";
 import { getAppointments, getPayments, getReviews } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
