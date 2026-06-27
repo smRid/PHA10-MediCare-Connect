@@ -6,7 +6,7 @@ import StatusPill from "@/components/shared/StatusPill";
 
 export default function DoctorCard({ doctor }) {
   return (
-    <article className="group overflow-hidden rounded-2xl glass-card border border-border/50 shadow-md transition-all duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/15 relative">
+    <article className="group flex flex-col h-full overflow-hidden rounded-2xl glass-card border border-border/50 shadow-md transition-all duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/15 relative">
       {/* Decorative Glow */}
       <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-primary/20 to-sky-500/20 opacity-0 blur-md transition-opacity duration-500 group-hover:opacity-100" />
       
@@ -31,7 +31,7 @@ export default function DoctorCard({ doctor }) {
         </div>
       </div>
       
-      <div className="p-6 relative z-10">
+      <div className="flex flex-1 flex-col p-6 relative z-10">
         <div className="flex items-start justify-between gap-3">
           <div>
             <h3 className="font-heading text-xl font-extrabold text-foreground group-hover:text-primary transition-colors duration-300">
@@ -61,7 +61,7 @@ export default function DoctorCard({ doctor }) {
         
         <Link
           href={`/doctors/${doctor._id}`}
-          className="mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-md shadow-primary/20 transition-all duration-300 hover:opacity-90 hover:shadow-lg hover:shadow-primary/30 active:scale-95"
+          className="mt-auto inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-md shadow-primary/20 transition-all duration-300 hover:opacity-90 hover:shadow-lg hover:shadow-primary/30 active:scale-95"
         >
           <CalendarPlus className="size-4 transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" />
           View and Book

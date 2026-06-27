@@ -88,6 +88,7 @@ export default function FeaturedDoctors() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.15 }}
+                className="h-full"
               >
                 <DoctorCard doctor={doctor} />
               </motion.div>

@@ -326,6 +326,7 @@ export default function DoctorsClient() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ delay: index * 0.05, duration: 0.4, ease: "easeOut" }}
+                      className="h-full"
                     >
                       <DoctorCard doctor={doctor} />
                     </motion.div>
