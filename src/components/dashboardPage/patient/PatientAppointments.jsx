@@ -21,7 +21,10 @@ export default function PatientAppointments() {
     if (!token) return;
     getAppointments(token)
       .then(setAppointments)
-      .catch(() => setAppointments([]));
+      .catch((err) => {
+        toast.error("Failed to fetch appointments: " + err.message);
+        setAppointments([]);
+      });
   }, [token]);
 
   const updateAppointment = async (id, updates) => {
