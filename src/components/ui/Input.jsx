@@ -16,7 +16,8 @@ export default function Input({ className, label, error, success, icon: Icon, id
           id={inputId}
           placeholder={label ? " " : props.placeholder}
           className={cn(
-            "peer h-12 w-full rounded-xl border border-input/60 bg-card/50 text-sm font-medium outline-none transition-all duration-300 placeholder:text-transparent hover:border-primary/40 focus:border-primary focus:bg-background focus:ring-[4px] focus:ring-primary/15 focus:shadow-md",
+            "peer h-12 w-full rounded-xl border border-input/60 bg-card/50 text-sm font-medium outline-none transition-all duration-300 hover:border-primary/40 focus:border-primary focus:bg-background focus:ring-[4px] focus:ring-primary/15 focus:shadow-md",
+            label ? "placeholder:text-transparent" : "placeholder:text-muted-foreground/70",
             Icon ? "pl-10" : "pl-4",
             error ? "border-destructive/60 hover:border-destructive focus:border-destructive focus:ring-destructive/20" : "",
             success ? "border-accent/60 hover:border-accent focus:border-accent focus:ring-accent/20" : "",

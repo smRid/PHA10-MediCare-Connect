@@ -10,6 +10,7 @@ import StatusPill from "@/components/shared/StatusPill";
 import Button from "@/components/ui/Button";
 import LoadingState from "@/components/shared/LoadingState";
 import Modal from "@/components/ui/Modal";
+import Input from "@/components/ui/Input";
 
 export default function ManageDoctors() {
   const { token } = useAuth();
@@ -61,13 +62,12 @@ export default function ManageDoctors() {
       <div className="overflow-hidden rounded-3xl border border-border/50 glass-card shadow-sm transition-all hover:shadow-lg">
         <div className="flex flex-col gap-4 border-b border-border/50 bg-muted/20 p-5 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="font-heading text-lg font-bold">Verification Queue</h3>
-          <div className="flex h-10 w-full max-w-sm items-center gap-2 rounded-full border border-border/50 bg-background px-4 transition-all focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10">
-            <Search className="size-4 shrink-0 text-muted-foreground" />
-            <input
+          <div className="w-full max-w-sm">
+            <Input
+              icon={Search}
               placeholder="Search by name or specialization..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-transparent text-sm font-medium outline-none placeholder:text-muted-foreground/70"
             />
           </div>
         </div>
