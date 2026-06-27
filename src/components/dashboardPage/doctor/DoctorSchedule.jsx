@@ -18,7 +18,7 @@ export default function DoctorSchedule() {
 
   useEffect(() => {
     if (!token || !user) return;
-    apiFetch(`/doctors/${user._id}`, { token })
+    apiFetch(`/doctors/me`, { token })
       .then((data) => {
         const normalized = normalizeDoctor(data);
         setDoctor(normalized);
