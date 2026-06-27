@@ -1,16 +1,77 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
-import { CalendarDays, Clock, FileText, User, Users } from "lucide-react";
+import { CalendarDays, Clock, FileText, User, Users, ChevronDown } from "lucide-react";
 import { apiFetch } from "@/lib/api/base";
 import { getAppointments, normalizeAppointment } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
-import Button from "@/components/ui/Button";
 import StatusPill from "@/components/shared/StatusPill";
 import { formatDate } from "@/lib/utils";
+
+function ActionDropdown({ onSelect }) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const closeOnOutsideClick = (event) => {
+      if (!menuRef.current?.contains(event.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
+  }, []);
+
+  return (
+    <div ref={menuRef} className="relative w-48">
+      <button
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className="flex h-9 w-full items-center justify-between gap-3 rounded-lg border border-border/50 bg-background/50 px-3 py-1.5 text-left text-xs font-medium outline-none transition-all focus:border-teal-500/50 focus:bg-background focus:ring-4 focus:ring-teal-500/10 hover:bg-background"
+      >
+        <span className="truncate text-foreground">Update Status...</span>
+        <ChevronDown
+          className={`size-3.5 shrink-0 text-muted-foreground transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            role="listbox"
+            className="specialization-scrollbar absolute left-0 right-0 top-[calc(100%+0.5rem)] z-40 overflow-hidden rounded-xl border border-border/50 bg-card/95 p-1.5 shadow-xl shadow-black/10 backdrop-blur-xl"
+          >
+            {[
+              { label: "Accept Request", value: "accepted" },
+              { label: "Mark Completed", value: "completed" },
+              { label: "Reject", value: "rejected" }
+            ].map((item) => (
+              <button
+                key={item.value}
+                type="button"
+                role="option"
+                onClick={() => {
+                  onSelect(item.value);
+                  setOpen(false);
+                }}
+                className="flex w-full items-center justify-start gap-3 rounded-lg px-3 py-2 text-left text-xs font-medium transition-colors text-foreground hover:bg-teal-500/10 hover:text-teal-600"
+              >
+                <span className="truncate">{item.label}</span>
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export default function DoctorAppointments() {
   const router = useRouter();
@@ -59,7 +120,7 @@ export default function DoctorAppointments() {
           Appointment Requests
         </p>
         <h2 className="mt-1 font-heading text-2xl font-extrabold text-foreground sm:text-3xl">
-          Accept, reject, or complete
+          Update Appointment Status
         </h2>
       </div>
 
@@ -100,16 +161,8 @@ export default function DoctorAppointments() {
                   <StatusPill status={item.paymentStatus} />
                 </div>
               </div>
-              <div className="flex flex-wrap items-center gap-3 border-t border-border/50 pt-4 mt-1">
-                <Button className="h-9 px-4 text-xs" onClick={() => setStatus(item._id, "accepted")}>
-                  Accept Request
-                </Button>
-                <Button variant="outline" className="h-9 px-4 text-xs" onClick={() => setStatus(item._id, "completed")}>
-                  Mark Completed
-                </Button>
-                <Button variant="danger" className="h-9 px-4 text-xs" onClick={() => setStatus(item._id, "rejected")}>
-                  Reject
-                </Button>
+              <div className="flex justify-start border-t border-border/50 pt-4 mt-1">
+                <ActionDropdown onSelect={(status) => setStatus(item._id, status)} />
               </div>
             </motion.article>
           ))}
