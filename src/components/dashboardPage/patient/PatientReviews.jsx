@@ -30,19 +30,20 @@ export default function PatientReviews() {
 
   const submit = async (event) => {
     event.preventDefault();
+    const form = event.currentTarget;
     setSubmitting(true);
     try {
       const review = await apiFetch("/reviews", {
         method: "POST",
         token,
         body: {
-          doctorId: new FormData(event.currentTarget).get("doctorId"),
-          rating: new FormData(event.currentTarget).get("rating"),
-          comment: new FormData(event.currentTarget).get("reviewText"),
+          doctorId: new FormData(form).get("doctorId"),
+          rating: new FormData(form).get("rating"),
+          comment: new FormData(form).get("reviewText"),
         },
       });
       setReviews((items) => [normalizeReview(review), ...items]);
-      event.currentTarget.reset();
+      form.reset();
       toast.success("Review added successfully");
     } catch (error) {
       toast.error(error.message);
