@@ -10,19 +10,19 @@ export default function DoctorCard({ doctor }) {
       {/* Decorative Glow */}
       <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-primary/20 to-sky-500/20 opacity-0 blur-md transition-opacity duration-500 group-hover:opacity-100" />
       
-      <div className="relative h-60 overflow-hidden bg-muted transform-gpu z-0">
+      <div className="relative h-60 shrink-0 pb-[1px] -mb-[1px] overflow-hidden bg-muted z-0 [clip-path:inset(0)]">
         <img
           src={
             doctor.profileImage ||
             "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=700&q=80"
           }
           alt={doctor.doctorName}
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 will-change-transform"
         />
         
         {/* Glassmorphic Gradient Overlays */}
-        <div className="absolute -inset-px bg-gradient-to-t from-background/95 via-background/10 to-transparent mix-blend-normal opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
-        <div className="absolute -inset-px bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="absolute -inset-1 bg-gradient-to-t from-background/95 via-background/10 to-transparent mix-blend-normal opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute -inset-1 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
         <div className="absolute left-3 top-3 z-10">
           <div className="rounded-full bg-background/50 backdrop-blur-md p-1 shadow-sm border border-border/50 transition-transform duration-300 group-hover:scale-105">
