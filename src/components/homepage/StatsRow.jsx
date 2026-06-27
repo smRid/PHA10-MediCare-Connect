@@ -8,6 +8,7 @@ import {
   MessageSquareHeart,
 } from "lucide-react";
 import { getStats } from "@/lib/api/healthcare";
+import SectionHeading from "@/components/shared/SectionHeading";
 
 function AnimatedCounter({ value }) {
   const count = useMotionValue(0);
@@ -30,6 +31,14 @@ const cards = [
 export default function StatsRow() {
   return (
     <section className="relative px-4 py-20 sm:px-6 lg:px-8 bg-background">
+      <div className="mx-auto max-w-7xl mb-12">
+        <SectionHeading
+          align="center"
+          eyebrow="Our Impact"
+          title="Empowering Healthcare"
+          description="Join thousands of satisfied patients and verified doctors who trust our platform for seamless medical care."
+        />
+      </div>
       <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map(({ key, label, icon: Icon, value }, index) => (
           <motion.article
