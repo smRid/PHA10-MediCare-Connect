@@ -19,10 +19,11 @@ export default function PatientStories() {
     <section className="relative overflow-hidden bg-background px-4 py-24 sm:px-6 lg:px-8 border-t border-border/50">
       <div className="mx-auto max-w-7xl relative z-10">
         <SectionHeading
-          align="center"
+          align="left"
           eyebrow="Patient Success Stories"
           title="Care journeys that felt less complicated"
           description="Real stories from patients who found the right care, right when they needed it."
+          titleClassName="!text-2xl sm:!text-3xl"
         />
         
         <div className="mt-16 columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
