@@ -187,12 +187,11 @@ export default function DoctorDetailsClient({ doctorId }) {
                   defaultValue={defaultDate}
                   required
                 />
-                <div className="grid gap-2">
-                  <label className="text-sm font-medium text-foreground">Time Slot</label>
+                <div className="relative grid gap-1 text-left group">
                   <div className="relative">
                     <select
                       name="appointmentTime"
-                      className="h-12 w-full appearance-none rounded-xl border border-border/50 bg-background/50 px-4 text-sm font-medium outline-none transition-all focus:border-primary/50 focus:bg-background focus:ring-4 focus:ring-primary/10"
+                      className="peer h-12 w-full appearance-none rounded-xl border border-input/60 bg-card/50 pl-4 pr-10 text-sm font-medium outline-none transition-all duration-300 hover:border-primary/40 focus:border-primary focus:bg-background focus:ring-[4px] focus:ring-primary/15 focus:shadow-md"
                     >
                       {(doctor.availableSlots || ["10:00 AM"]).map((slot) => (
                         <option key={slot} value={slot}>
@@ -200,7 +199,10 @@ export default function DoctorDetailsClient({ doctorId }) {
                         </option>
                       ))}
                     </select>
-                    <Clock className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                    <label className="absolute top-0 -translate-y-1/2 scale-[0.85] text-xs font-semibold text-muted-foreground transition-all duration-300 peer-focus:text-primary origin-left bg-card px-1.5 rounded-md pointer-events-none left-3">
+                      Time Slot
+                    </label>
+                    <Clock className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground transition-colors duration-300 peer-focus:text-primary" />
                   </div>
                 </div>
               </div>
