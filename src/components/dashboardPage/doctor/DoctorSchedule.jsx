@@ -1,20 +1,99 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Clock, Plus, X } from "lucide-react";
+import { Calendar, Clock, Plus, X, ChevronDown, Check } from "lucide-react";
 import { apiFetch } from "@/lib/api/base";
 import { normalizeDoctor } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
+
+function CustomSelect({ options, placeholder, selectedOptions, value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  const availableOptions = options.filter(opt => !selectedOptions.includes(opt));
+  const selectedLabel = value || placeholder;
+
+  useEffect(() => {
+    const closeOnOutsideClick = (event) => {
+      if (!menuRef.current?.contains(event.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
+  }, []);
+
+  return (
+    <div ref={menuRef} className="relative w-full">
+      <button
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className="flex h-10 w-full items-center justify-between gap-3 rounded-lg border border-border/50 bg-background/50 px-3 py-2 text-left text-sm font-medium outline-none transition-all focus:border-teal-500/50 focus:bg-background focus:ring-4 focus:ring-teal-500/10 hover:bg-background"
+      >
+        <span className={`truncate ${!value ? "text-muted-foreground" : "text-foreground"}`}>{selectedLabel}</span>
+        <ChevronDown
+          className={`size-4 shrink-0 text-muted-foreground transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            role="listbox"
+            className="specialization-scrollbar absolute left-0 right-0 top-[calc(100%+0.5rem)] z-40 max-h-64 overflow-y-auto rounded-xl border border-border/50 bg-card/95 p-1.5 shadow-xl shadow-black/10 backdrop-blur-xl"
+          >
+            {availableOptions.length === 0 ? (
+              <div className="px-3 py-2.5 text-center text-sm text-muted-foreground">No options left</div>
+            ) : (
+              availableOptions.map((item) => {
+                const selected = item === value;
+                return (
+                  <button
+                    key={item}
+                    type="button"
+                    role="option"
+                    aria-selected={selected}
+                    onClick={() => {
+                      onChange(item);
+                      setOpen(false);
+                    }}
+                    className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                      selected
+                        ? "bg-teal-500 text-white"
+                        : "text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    <span className="truncate">{item}</span>
+                    {selected && <Check className="size-4 shrink-0" />}
+                  </button>
+                );
+              })
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export default function DoctorSchedule() {
   const { token, user } = useAuth();
   const [doctor, setDoctor] = useState(null);
   const [days, setDays] = useState([]);
   const [slots, setSlots] = useState([]);
+  
+  const [selectedDay, setSelectedDay] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState("");
+
+  const allDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const allSlots = ["08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM", "08:00 PM"];
 
   useEffect(() => {
     if (!token || !user) return;
@@ -28,11 +107,20 @@ export default function DoctorSchedule() {
       .catch(() => setDoctor(null));
   }, [token, user]);
 
-  const addValue = (event, setter, current) => {
+  const addDay = (event) => {
     event.preventDefault();
-    const value = new FormData(event.currentTarget).get("value");
-    if (value && !current.includes(value)) setter([...current, value]);
-    event.currentTarget.reset();
+    if (selectedDay && !days.includes(selectedDay)) {
+      setDays([...days, selectedDay]);
+      setSelectedDay("");
+    }
+  };
+
+  const addSlot = (event) => {
+    event.preventDefault();
+    if (selectedSlot && !slots.includes(selectedSlot)) {
+      setSlots([...slots, selectedSlot]);
+      setSelectedSlot("");
+    }
   };
 
   const save = async () => {
@@ -77,18 +165,15 @@ export default function DoctorSchedule() {
             </div>
             <h3 className="font-heading text-xl font-bold">Working Days</h3>
           </div>
-          <form onSubmit={(event) => addValue(event, setDays, days)} className="flex gap-2">
+          <form onSubmit={addDay} className="flex gap-2">
             <div className="flex-1">
-              <select
-                name="value"
-                defaultValue=""
-                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              >
-                <option value="" disabled>Select a day...</option>
-                {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
-                  <option key={day} value={day}>{day}</option>
-                ))}
-              </select>
+              <CustomSelect
+                options={allDays}
+                placeholder="Select a day..."
+                selectedOptions={days}
+                value={selectedDay}
+                onChange={setSelectedDay}
+              />
             </div>
             <Button type="submit" className="shrink-0 bg-teal-600 hover:bg-teal-700 text-white border-0 shadow-lg shadow-teal-500/20">
               <Plus className="size-4 mr-1" /> Add
@@ -121,18 +206,15 @@ export default function DoctorSchedule() {
             </div>
             <h3 className="font-heading text-xl font-bold">Time Slots</h3>
           </div>
-          <form onSubmit={(event) => addValue(event, setSlots, slots)} className="flex gap-2">
+          <form onSubmit={addSlot} className="flex gap-2">
             <div className="flex-1">
-              <select
-                name="value"
-                defaultValue=""
-                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              >
-                <option value="" disabled>Select a time slot...</option>
-                {["08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM", "08:00 PM"].map(time => (
-                  <option key={time} value={time}>{time}</option>
-                ))}
-              </select>
+              <CustomSelect
+                options={allSlots}
+                placeholder="Select a time slot..."
+                selectedOptions={slots}
+                value={selectedSlot}
+                onChange={setSelectedSlot}
+              />
             </div>
             <Button type="submit" className="shrink-0 bg-teal-600 hover:bg-teal-700 text-white border-0 shadow-lg shadow-teal-500/20">
               <Plus className="size-4 mr-1" /> Add
