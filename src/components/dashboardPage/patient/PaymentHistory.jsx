@@ -8,6 +8,7 @@ import { currency, formatDate } from "@/lib/utils";
 
 export default function PaymentHistory() {
   const { token } = useAuth();
+  const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
