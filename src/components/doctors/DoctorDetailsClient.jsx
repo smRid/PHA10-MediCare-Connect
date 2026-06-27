@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Activity, CalendarPlus, Clock, CreditCard, MapPin, ShieldCheck, Star } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Activity, CalendarPlus, Clock, CreditCard, MapPin, ShieldCheck, Star, Check, Calendar } from "lucide-react";
 import { toast } from "react-toastify";
 import { apiFetch } from "@/lib/api/base";
 import { getDoctorById, getReviews } from "@/lib/api/healthcare";
@@ -15,17 +15,119 @@ import Textarea from "@/components/ui/Textarea";
 import StatusPill from "@/components/shared/StatusPill";
 import LoadingState from "@/components/shared/LoadingState";
 
+function CustomDropdown({ value, onChange, options, placeholder, icon: Icon, label }) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const closeOnOutsideClick = (event) => {
+      if (!menuRef.current?.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
+  }, []);
+
+  const selectedOption = options.find((opt) => opt.value === value);
+
+  return (
+    <div ref={menuRef} className="relative text-left w-full">
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setOpen((current) => !current)}
+          className={`peer flex h-12 w-full items-center justify-between rounded-xl border bg-card/50 pl-4 pr-10 text-sm font-medium outline-none transition-all duration-300 hover:border-primary/40 focus:border-primary focus:bg-background focus:ring-[4px] focus:ring-primary/15 focus:shadow-md ${open ? 'border-primary ring-[4px] ring-primary/15' : 'border-input/60'}`}
+        >
+          <span className={`truncate ${!selectedOption ? "text-muted-foreground/70" : "text-foreground"}`}>
+            {selectedOption ? selectedOption.label : placeholder}
+          </span>
+        </button>
+        <label className={`absolute top-0 -translate-y-1/2 scale-[0.85] text-xs font-semibold transition-all duration-300 origin-left bg-card px-1.5 rounded-md pointer-events-none left-3 ${open || selectedOption ? "text-primary" : "text-muted-foreground"}`}>
+          {label}
+        </label>
+        {Icon && (
+          <Icon className={`pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 transition-colors duration-300 ${open ? "text-primary" : "text-muted-foreground"}`} />
+        )}
+      </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="specialization-scrollbar absolute left-0 right-0 top-[calc(100%+0.5rem)] z-40 max-h-60 overflow-y-auto rounded-xl border border-border/50 bg-card/95 p-1.5 shadow-xl shadow-black/10 backdrop-blur-xl"
+          >
+            {options.map((item) => {
+              const selected = item.value === value;
+              return (
+                <button
+                  key={item.value}
+                  type="button"
+                  onClick={() => {
+                    onChange(item.value);
+                    setOpen(false);
+                  }}
+                  className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                    selected
+                      ? "bg-primary text-primary-foreground"
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <span className="truncate">{item.label}</span>
+                  {selected && <Check className="size-4 shrink-0" />}
+                </button>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function DoctorDetailsClient({ doctorId }) {
   const { user, token } = useAuth();
   const [doctor, setDoctor] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [defaultDate] = useState(() => {
-    const date = new Date();
-    date.setDate(date.getDate() + 1);
-    return date.toISOString().slice(0, 10);
-  });
+
+  const availableDatesOptions = useMemo(() => {
+    if (!doctor) return [];
+    const days = doctor.availableDays || [];
+    const dates = [];
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const validDays = days.length > 0 ? days.map(d => dayNames.indexOf(d)) : [0, 1, 2, 3, 4, 5, 6];
+    
+    let current = new Date();
+    current.setDate(current.getDate() + 1); // Start from tomorrow
+
+    while (dates.length < 14) {
+      if (validDays.includes(current.getDay())) {
+        const dateString = current.toISOString().split("T")[0]; // YYYY-MM-DD
+        const label = current.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        dates.push({ value: dateString, label });
+      }
+      current.setDate(current.getDate() + 1);
+    }
+    return dates;
+  }, [doctor]);
+
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+
+  // Initialize selected values once options load
+  useEffect(() => {
+    if (!selectedDate && availableDatesOptions.length > 0) {
+      setSelectedDate(availableDatesOptions[0].value);
+    }
+    if (!selectedTime && doctor?.availableSlots?.length > 0) {
+      setSelectedTime(doctor.availableSlots[0]);
+    }
+  }, [availableDatesOptions, doctor, selectedDate, selectedTime]);
 
   useEffect(() => {
     Promise.all([getDoctorById(doctorId), getReviews({ doctorId })])
@@ -187,31 +289,24 @@ export default function DoctorDetailsClient({ doctorId }) {
 
             <form onSubmit={submit} className="relative z-10 grid gap-5">
               <div className="grid gap-5 sm:grid-cols-2">
-                <Input
-                  name="appointmentDate"
+                <input type="hidden" name="appointmentDate" value={selectedDate} />
+                <input type="hidden" name="appointmentTime" value={selectedTime} />
+                <CustomDropdown
                   label="Date"
-                  type="date"
-                  defaultValue={defaultDate}
-                  required
+                  placeholder="Select a date"
+                  icon={Calendar}
+                  value={selectedDate}
+                  onChange={setSelectedDate}
+                  options={availableDatesOptions}
                 />
-                <div className="relative grid gap-1 text-left group">
-                  <div className="relative">
-                    <select
-                      name="appointmentTime"
-                      className="peer h-12 w-full appearance-none rounded-xl border border-input/60 bg-card/50 pl-4 pr-10 text-sm font-medium outline-none transition-all duration-300 hover:border-primary/40 focus:border-primary focus:bg-background focus:ring-[4px] focus:ring-primary/15 focus:shadow-md"
-                    >
-                      {(doctor.availableSlots || ["10:00 AM"]).map((slot) => (
-                        <option key={slot} value={slot}>
-                          {slot}
-                        </option>
-                      ))}
-                    </select>
-                    <label className="absolute top-0 -translate-y-1/2 scale-[0.85] text-xs font-semibold text-muted-foreground transition-all duration-300 peer-focus:text-primary origin-left bg-card px-1.5 rounded-md pointer-events-none left-3">
-                      Time Slot
-                    </label>
-                    <Clock className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground transition-colors duration-300 peer-focus:text-primary" />
-                  </div>
-                </div>
+                <CustomDropdown
+                  label="Time Slot"
+                  placeholder="Select a time slot"
+                  icon={Clock}
+                  value={selectedTime}
+                  onChange={setSelectedTime}
+                  options={(doctor.availableSlots || ["10:00 AM"]).map(slot => ({ value: slot, label: slot }))}
+                />
               </div>
               
               <Textarea

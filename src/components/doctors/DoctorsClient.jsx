@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronDown, LayoutGrid, List, Search } from "lucide-react";
 import { specializations } from "@/lib/constants";
@@ -171,8 +172,9 @@ function SortFilter({ value, onChange }) {
 }
 
 export default function DoctorsClient() {
+  const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
-  const [specialization, setSpecialization] = useState("");
+  const [specialization, setSpecialization] = useState(searchParams?.get("specialization") || "");
   const [sort, setSort] = useState("rating");
   const [page, setPage] = useState(1);
   const [layout, setLayout] = useState("card");

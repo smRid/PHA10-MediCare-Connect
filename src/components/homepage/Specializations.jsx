@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Activity,
   Baby,
@@ -128,9 +129,10 @@ export default function Specializations() {
         
         <div className="mt-14 columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
           {items.map(({ icon: Icon, label, text }) => (
-            <article
+            <Link
               key={label}
-              className="group break-inside-avoid relative overflow-hidden rounded-2xl border border-border/50 glass-card p-6 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/15"
+              href={`/find-doctors?specialization=${encodeURIComponent(label)}`}
+              className="group block break-inside-avoid relative overflow-hidden rounded-2xl border border-border/50 glass-card p-6 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/15"
             >
               {/* Decorative Internal Glow */}
               <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-primary/10 to-transparent opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
@@ -148,7 +150,7 @@ export default function Specializations() {
                   </p>
                 </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>
