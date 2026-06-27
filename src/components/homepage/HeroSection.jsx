@@ -151,7 +151,7 @@ export default function HeroSection() {
                 src={slide.src}
                 alt={slide.alt}
                 className={cn(
-                  "absolute inset-0 h-full w-full object-cover transition-all duration-1000 ease-in-out",
+                  "absolute inset-0 h-full w-full object-cover object-top transition-all duration-1000 ease-in-out",
                   activeSlide === index ? "opacity-100 scale-100 blur-none z-10" : "opacity-0 scale-105 blur-sm z-0"
                 )}
               />
