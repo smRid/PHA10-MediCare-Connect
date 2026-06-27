@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  ArrowRight,
   Activity,
   Baby,
   Bone,
@@ -120,12 +121,22 @@ export default function Specializations() {
       <div className="absolute left-1/2 top-0 h-[400px] w-full max-w-4xl -translate-x-1/2 rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <SectionHeading
-          align="center"
-          eyebrow="Specializations"
-          title="Browse by the care you need"
-          description="Choose the right department quickly, from primary care to advanced diagnostics."
-        />
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <SectionHeading
+            align="left"
+            eyebrow="Specializations"
+            title="Browse by the care you need"
+            description="Choose the right department quickly, from primary care to advanced diagnostics."
+            className="flex-1"
+          />
+          <Link
+            href="/find-doctors"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-border bg-card px-5 text-sm font-semibold text-foreground shadow-sm transition-all hover:bg-muted hover:text-primary hover:border-primary/30"
+          >
+            View all doctors
+            <ArrowRight className="size-4" />
+          </Link>
+        </div>
         
         <div className="mt-14 columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
           {items.map(({ icon: Icon, label, text }) => (
