@@ -124,7 +124,7 @@ export default function ProfileClient() {
                    Email Address
                  </h3>
                  <div className="grid gap-5">
-                   <Input label="Email Address" defaultValue={user.email || ""} disabled className="cursor-not-allowed bg-muted/50 opacity-70" />
+                   <Input defaultValue={user.email || ""} disabled className="cursor-not-allowed bg-muted/50 opacity-70" />
                  </div>
                </div>
                
