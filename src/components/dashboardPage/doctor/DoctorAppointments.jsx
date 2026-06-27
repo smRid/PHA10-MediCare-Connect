@@ -11,7 +11,31 @@ import { useAuth } from "@/lib/auth-context";
 import StatusPill from "@/components/shared/StatusPill";
 import { formatDate } from "@/lib/utils";
 
-function ActionDropdown({ onSelect }) {
+const toneByStatus = {
+  verified: "green",
+  accepted: "green",
+  paid: "green",
+  completed: "green",
+  active: "green",
+  requested: "amber",
+  pending: "amber",
+  rescheduled: "blue",
+  unpaid: "red",
+  rejected: "red",
+  cancelled: "red",
+  suspended: "red",
+};
+
+const toneMap = {
+  teal: "bg-primary/10 text-primary border-primary/20",
+  green: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+  blue: "bg-sky-500/10 text-sky-700 dark:text-sky-400 border-sky-500/20",
+  amber: "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20",
+  red: "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20",
+  gray: "bg-muted/50 text-muted-foreground border-border",
+};
+
+function ActionDropdown({ status, onSelect }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -23,18 +47,21 @@ function ActionDropdown({ onSelect }) {
     return () => document.removeEventListener("mousedown", closeOnOutsideClick);
   }, []);
 
+  const tone = toneByStatus[status] || "gray";
+  const label = String(status || "unknown").replaceAll("_", " ");
+
   return (
-    <div ref={menuRef} className="relative w-48">
+    <div ref={menuRef} className="relative w-36 z-20">
       <button
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className="flex h-9 w-full items-center justify-between gap-3 rounded-lg border border-border/50 bg-background/50 px-3 py-1.5 text-left text-xs font-medium outline-none transition-all focus:border-teal-500/50 focus:bg-background focus:ring-4 focus:ring-teal-500/10 hover:bg-background"
+        className={`flex w-full items-center justify-between gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold border backdrop-blur-md transition-all duration-300 hover:scale-105 hover:shadow-md outline-none focus:ring-2 focus:ring-primary/20 ${toneMap[tone]}`}
       >
-        <span className="truncate text-foreground">Update Status...</span>
+        <span className="truncate">{label}</span>
         <ChevronDown
-          className={`size-3.5 shrink-0 text-muted-foreground transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+          className={`size-3.5 shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -46,7 +73,7 @@ function ActionDropdown({ onSelect }) {
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             role="listbox"
-            className="specialization-scrollbar absolute left-0 right-0 top-[calc(100%+0.5rem)] z-40 overflow-hidden rounded-xl border border-border/50 bg-card/95 p-1.5 shadow-xl shadow-black/10 backdrop-blur-xl"
+            className="specialization-scrollbar absolute left-auto right-0 top-[calc(100%+0.5rem)] z-40 w-48 overflow-hidden rounded-xl border border-border/50 bg-card/95 p-1.5 shadow-xl shadow-black/10 backdrop-blur-xl"
           >
             {[
               { label: "Accept Request", value: "accepted" },
@@ -159,12 +186,9 @@ export default function DoctorAppointments() {
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 lg:flex-col lg:items-end">
-                  <StatusPill status={item.appointmentStatus} />
+                  <ActionDropdown status={item.appointmentStatus} onSelect={(status) => setStatus(item._id, status)} />
                   <StatusPill status={item.paymentStatus} />
                 </div>
-              </div>
-              <div className="flex justify-start border-t border-border/50 pt-4 mt-1">
-                <ActionDropdown onSelect={(status) => setStatus(item._id, status)} />
               </div>
             </motion.article>
           ))}
