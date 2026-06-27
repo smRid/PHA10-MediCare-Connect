@@ -36,9 +36,9 @@ export function normalizeDoctor(doctor) {
   return {
     ...doctor,
     _id: doctor._id || doctor.id,
-    doctorName: doctor.doctorName || doctor.userProfile?.name || doctor.name,
+    doctorName: doctor.userProfile?.name ?? doctor.doctorName ?? doctor.name,
     hospitalName: doctor.hospitalName || doctor.hospital,
-    profileImage: doctor.profileImage || doctor.image || doctor.userProfile?.photo,
+    profileImage: doctor.userProfile?.photo ?? doctor.profileImage ?? doctor.image,
     availableDays: doctor.availableDays || doctor.days || [],
     availableSlots: doctor.availableSlots || doctor.slots || [],
   };
