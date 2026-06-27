@@ -22,22 +22,16 @@ function AnimatedCounter({ value }) {
 }
 
 const cards = [
-  { key: "totalDoctors", label: "Verified Doctors", icon: Stethoscope },
-  { key: "totalPatients", label: "Happy Patients", icon: Users },
-  { key: "totalReviews", label: "Patient Reviews", icon: MessageSquareHeart },
+  { key: "totalDoctors", label: "Verified Doctors", icon: Stethoscope, value: 340 },
+  { key: "totalPatients", label: "Happy Patients", icon: Users, value: 2500 },
+  { key: "totalReviews", label: "Patient Reviews", icon: MessageSquareHeart, value: 1250 },
 ];
 
 export default function StatsRow() {
-  const [stats, setStats] = useState({ totalPatients: 0, totalDoctors: 0, totalAppointments: 0, totalReviews: 0 });
-
-  useEffect(() => {
-    getStats().then(setStats).catch(() => setStats({ totalPatients: 0, totalDoctors: 0, totalAppointments: 0, totalReviews: 0 }));
-  }, []);
-
   return (
     <section className="relative px-4 py-20 sm:px-6 lg:px-8 bg-background">
       <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {cards.map(({ key, label, icon: Icon }, index) => (
+        {cards.map(({ key, label, icon: Icon, value }, index) => (
           <motion.article
             key={key}
             initial={{ opacity: 0, y: 30 }}
@@ -54,7 +48,7 @@ export default function StatsRow() {
                 <Icon className="size-7 text-primary transition-colors duration-500 group-hover:text-primary-foreground mix-blend-color-burn dark:mix-blend-normal" />
               </div>
               <p className="font-heading text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/70">
-                <AnimatedCounter value={Number(stats[key] || 0)} />+
+                <AnimatedCounter value={value} />+
               </p>
               <p className="mt-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
                 {label}

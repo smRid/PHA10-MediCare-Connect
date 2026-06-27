@@ -31,22 +31,8 @@ const heroSlides = [
 ];
 
 export default function HeroSection() {
-  const [stats, setStats] = useState({
-    totalAppointments: 0,
-    totalDoctors: 0,
-    totalPatients: 0,
-  });
   const [activeSlide, setActiveSlide] = useState(0);
-
   useEffect(() => {
-    getStats()
-      .then((data) =>
-        setStats(
-          data || { totalAppointments: 0, totalDoctors: 0, totalPatients: 0 },
-        ),
-      )
-      .catch(() => {});
-
     const timer = setInterval(() => {
       setActiveSlide((current) => (current + 1) % heroSlides.length);
     }, 4500);
@@ -54,23 +40,20 @@ export default function HeroSection() {
     return () => clearInterval(timer);
   }, []);
 
-  const metrics = useMemo(
-    () => [
-      {
-        label: "Appointments booked",
-        value: compactNumber(stats.totalAppointments),
-      },
-      {
-        label: "Verified doctors",
-        value: `${compactNumber(stats.totalDoctors)}+`,
-      },
-      {
-        label: "Patients connected",
-        value: compactNumber(stats.totalPatients),
-      },
-    ],
-    [stats],
-  );
+  const metrics = [
+    {
+      label: "Appointments booked",
+      value: "14.2k+",
+    },
+    {
+      label: "Verified doctors",
+      value: "340+",
+    },
+    {
+      label: "Patients connected",
+      value: "8.5k+",
+    },
+  ];
 
   return (
     <section className="relative overflow-hidden border-b border-border px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
