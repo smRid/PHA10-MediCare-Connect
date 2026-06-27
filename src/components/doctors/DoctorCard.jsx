@@ -54,18 +54,20 @@ export default function DoctorCard({ doctor }) {
           <Badge tone="green">{currency(doctor.consultationFee)}</Badge>
         </div>
         
-        <p className="mt-5 flex items-center gap-2 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-          <MapPin className="size-4 text-primary" />
-          {doctor.hospitalName}
-        </p>
-        
-        <Link
-          href={`/doctors/${doctor._id}`}
-          className="mt-auto inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-md shadow-primary/20 transition-all duration-300 hover:opacity-90 hover:shadow-lg hover:shadow-primary/30 active:scale-95"
-        >
-          <CalendarPlus className="size-4 transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" />
-          View and Book
-        </Link>
+        <div className="mt-auto pt-5">
+          <p className="mb-6 flex items-center gap-2 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300">
+            <MapPin className="size-4 text-primary" />
+            {doctor.hospitalName}
+          </p>
+          
+          <Link
+            href={`/doctors/${doctor._id}`}
+            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-md shadow-primary/20 transition-all duration-300 hover:opacity-90 hover:shadow-lg hover:shadow-primary/30 active:scale-95"
+          >
+            <CalendarPlus className="size-4 transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" />
+            View and Book
+          </Link>
+        </div>
       </div>
     </article>
   );
