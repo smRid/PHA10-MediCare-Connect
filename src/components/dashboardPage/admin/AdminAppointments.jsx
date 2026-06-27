@@ -33,16 +33,16 @@ export default function AdminAppointments() {
       <div className="overflow-hidden rounded-lg border border-border bg-card">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] text-left text-sm">
-            <thead className="bg-muted text-muted-foreground">
+            <thead className="bg-muted/30 text-muted-foreground border-b border-border/50">
               <tr>
-                <th className="px-4 py-3">Patient</th>
-                <th className="px-4 py-3">Doctor</th>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Time</th>
-                <th className="px-4 py-3 text-right">Status</th>
+                <th className="px-6 py-4 font-bold uppercase tracking-wider text-[10px]">Patient</th>
+                <th className="px-6 py-4 font-bold uppercase tracking-wider text-[10px]">Doctor</th>
+                <th className="px-6 py-4 font-bold uppercase tracking-wider text-[10px]">Date</th>
+                <th className="px-6 py-4 font-bold uppercase tracking-wider text-[10px]">Time</th>
+                <th className="px-6 py-4 text-right font-bold uppercase tracking-wider text-[10px]">Status</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-border/50">
               {appointments.map((appt) => (
                 <tr key={appt._id} className="border-t border-border">
                   <td className="px-4 py-3">

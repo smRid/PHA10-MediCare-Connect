@@ -32,31 +32,36 @@ export default function AdminPayments() {
       <div className="overflow-hidden rounded-lg border border-border bg-card">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] text-left text-sm">
-            <thead className="bg-muted text-muted-foreground">
+            <thead className="bg-muted/30 text-muted-foreground border-b border-border/50">
               <tr>
-                <th className="px-4 py-3">Transaction ID</th>
-                <th className="px-4 py-3">Patient</th>
-                <th className="px-4 py-3">Doctor</th>
-                <th className="px-4 py-3 text-right">Amount</th>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3 text-right">Status</th>
+                <th className="px-6 py-4 font-bold uppercase tracking-wider text-[10px]">Transaction ID</th>
+                <th className="px-6 py-4 font-bold uppercase tracking-wider text-[10px]">Patient</th>
+                <th className="px-6 py-4 font-bold uppercase tracking-wider text-[10px]">Doctor</th>
+                <th className="px-6 py-4 text-right font-bold uppercase tracking-wider text-[10px]">Amount</th>
+                <th className="px-6 py-4 font-bold uppercase tracking-wider text-[10px]">Date</th>
+                <th className="px-6 py-4 text-right font-bold uppercase tracking-wider text-[10px]">Status</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-border/50">
               {payments.map((payment) => {
                 const amount = payment.amount || payment.fee || 0;
+                
+                // Resolve names robustly from populated fields
+                const patientName = payment.patient?.name || payment.appointment?.patientName || "Unknown Patient";
+                const doctorName = payment.doctor?.user?.name || payment.doctor?.doctorName || payment.doctor?.name || payment.appointment?.doctorName || "Unknown Doctor";
+
                 return (
-                  <tr key={payment._id} className="border-t border-border">
-                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
+                  <tr key={payment._id} className="transition-colors hover:bg-muted/20">
+                    <td className="px-6 py-4 font-mono text-xs text-muted-foreground">
                       {payment.transactionId || payment._id.slice(-8)}
                     </td>
-                    <td className="px-4 py-3 font-semibold text-foreground">
-                      {payment.appointment?.patientName || "Unknown"}
+                    <td className="px-6 py-4">
+                      <span className="font-semibold text-foreground">{patientName}</span>
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">
-                      {payment.appointment?.doctorName || "Unknown"}
+                    <td className="px-6 py-4 text-muted-foreground">
+                      {doctorName}
                     </td>
-                    <td className="px-4 py-3 text-right font-medium text-primary">
+                    <td className="px-6 py-4 text-right font-medium text-primary">
                       {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(Number(amount))}
                     </td>
                     <td className="px-4 py-3 text-sm text-muted-foreground">
