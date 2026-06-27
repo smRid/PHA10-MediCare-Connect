@@ -107,6 +107,12 @@ const nav = {
     },
     {
       type: "link",
+      label: "Contact Responses",
+      href: "/dashboard/admin/contacts",
+      icon: MessageSquareText,
+    },
+    {
+      type: "link",
       label: "Analytics",
       href: "/dashboard/admin/analytics",
       icon: BarChart3,
