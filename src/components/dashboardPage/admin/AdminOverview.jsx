@@ -49,8 +49,8 @@ function AnimatedChart({ activity }) {
             
             <div className="relative w-full max-w-[48px] flex-1 rounded-t-xl bg-muted/40 overflow-hidden ring-1 ring-border/50 transition-colors group-hover:bg-muted/60">
               <motion.div
-                initial={{ height: "4px" }}
-                animate={{ height: `max(4px, ${(item.value / maxCount) * 100}%)` }}
+                initial={{ height: "2%" }}
+                animate={{ height: `${Math.max((item.value / maxCount) * 100, 2)}%` }}
                 transition={{ duration: 1.2, delay: 0.5 + i * 0.1, type: "spring", bounce: 0.3 }}
                 className="absolute bottom-0 w-full rounded-t-xl bg-gradient-to-t from-primary to-sky-400 transition-transform duration-300 group-hover:scale-105"
               />
