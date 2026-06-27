@@ -33,7 +33,8 @@ export default function DoctorPrescriptions() {
 
   const submit = async (event) => {
     event.preventDefault();
-    const form = Object.fromEntries(new FormData(event.currentTarget));
+    const formElement = event.currentTarget;
+    const form = Object.fromEntries(new FormData(formElement));
     try {
       const prescription = await apiFetch("/prescriptions", {
         method: "POST",
@@ -51,9 +52,8 @@ export default function DoctorPrescriptions() {
           ],
         },
       });
-      });
       setPrescriptions((items) => [normalizePrescription(prescription), ...items]);
-      event.currentTarget.reset();
+      formElement.reset();
       setSelectedAppointment("");
       toast.success("Prescription created");
     } catch (error) {
