@@ -48,26 +48,17 @@ export const metadata = {
     description:
       "The ultimate healthcare management platform. Book appointments with top-rated specialists, manage digital prescriptions, and securely pay for medical consultations online.",
     siteName: "MediCare Connect",
-    images: [
-      {
-        url: "/logo.svg",
-        width: 1200,
-        height: 630,
-        alt: "MediCare Connect Platform",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "MediCare Connect | Find & Book Top-Rated Doctors Instantly",
     description:
       "The ultimate healthcare management platform. Book appointments with top-rated specialists, manage digital prescriptions, and securely pay for medical consultations online.",
-    images: ["/logo.svg"],
   },
   icons: {
-    icon: "/logo.svg",
-    shortcut: "/logo.svg",
-    apple: "/logo.svg",
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   },
   robots: {
     index: true,
