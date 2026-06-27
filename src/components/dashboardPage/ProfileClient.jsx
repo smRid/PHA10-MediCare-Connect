@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Camera, Mail, Phone, Save, Shield, User as UserIcon } from "lucide-react";
+import { Camera, Mail, Phone, Save, Shield, User as UserIcon, ChevronDown } from "lucide-react";
 import { toast } from "react-toastify";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
@@ -84,7 +84,24 @@ export default function ProfileClient() {
                  </h3>
                  <div className="grid gap-5 sm:grid-cols-2">
                    <Input name="name" label="Full Name" defaultValue={user.name || ""} required className="bg-background/50" />
-                   <Input name="gender" label="Gender" defaultValue={user.gender || ""} className="bg-background/50" />
+                   <div className="relative grid gap-1 text-left group">
+                     <div className="relative">
+                       <select
+                         name="gender"
+                         defaultValue={user.gender || ""}
+                         className="peer h-12 w-full appearance-none rounded-xl border border-input/60 bg-background/50 pl-4 pr-10 text-sm font-medium outline-none transition-all duration-300 hover:border-primary/40 focus:border-primary focus:bg-background focus:ring-[4px] focus:ring-primary/15 focus:shadow-md text-foreground"
+                       >
+                         <option value="" disabled>Select Gender</option>
+                         <option value="Male">Male</option>
+                         <option value="Female">Female</option>
+                         <option value="Others">Others</option>
+                       </select>
+                       <label className="absolute top-0 -translate-y-1/2 scale-[0.85] text-xs font-semibold text-muted-foreground transition-all duration-300 peer-focus:text-primary origin-left bg-card px-1.5 rounded-md pointer-events-none left-3">
+                         Gender
+                       </label>
+                       <ChevronDown className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground transition-colors duration-300 peer-focus:text-primary" />
+                     </div>
+                   </div>
                    <div className="sm:col-span-2">
                      <Input name="photo" label="Profile Photo URL" defaultValue={user.photo || ""} placeholder="https://..." className="bg-background/50" />
                    </div>
@@ -104,7 +121,7 @@ export default function ProfileClient() {
                <div className="space-y-6">
                  <h3 className="flex items-center gap-2 border-b border-border/50 pb-2 text-lg font-bold text-foreground">
                    <Mail className="size-5 text-muted-foreground" />
-                   System Accounts (Read-only)
+                   Email Address
                  </h3>
                  <div className="grid gap-5">
                    <Input label="Email Address" defaultValue={user.email || ""} disabled className="cursor-not-allowed bg-muted/50 opacity-70" />
