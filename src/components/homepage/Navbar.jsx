@@ -94,15 +94,9 @@ export default function Navbar() {
             <>
               <Link
                 href="/login"
-                className="text-sm font-semibold text-muted-foreground hover:text-foreground"
-              >
-                Login
-              </Link>
-              <Link
-                href="/register"
                 className="inline-flex h-10 items-center rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90"
               >
-                Register
+                Sign In
               </Link>
             </>
           )}
@@ -193,20 +187,13 @@ export default function Navbar() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-2">
               <Link
                 href="/login"
                 onClick={closeMenus}
-                className="flex h-10 items-center justify-center rounded-lg border border-input bg-card text-sm font-semibold transition hover:bg-muted hover:text-foreground"
-              >
-                Login
-              </Link>
-              <Link
-                href="/register"
-                onClick={closeMenus}
                 className="flex h-10 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90"
               >
-                Register
+                Sign In
               </Link>
             </div>
           )}
