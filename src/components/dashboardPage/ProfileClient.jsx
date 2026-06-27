@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Camera, Mail, Phone, Save, Shield, User as UserIcon, ChevronDown } from "lucide-react";
 import { toast } from "react-toastify";
@@ -13,6 +14,14 @@ export default function ProfileClient() {
   const { user, loading, updateProfile } = useAuth();
   const [saving, setSaving] = useState(false);
 
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [loading, user, router]);
+
   if (loading || !user) return <LoadingState label="Loading profile..." />;
 
   const submit = async (event) => {
@@ -20,7 +29,6 @@ export default function ProfileClient() {
     setSaving(true);
     try {
       await updateProfile(Object.fromEntries(new FormData(event.currentTarget)));
-      toast.success("Profile updated successfully!");
     } catch (error) {
       toast.error(error.message);
     } finally {
