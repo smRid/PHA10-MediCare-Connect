@@ -7,16 +7,18 @@ import SectionHeading from "@/components/shared/SectionHeading";
 import StatCard from "@/components/dashboardPage/StatCard";
 import { getStats } from "@/lib/api/healthcare";
 
-function AnimatedChart() {
-  const data = [
-    { label: "Mon", value: 35 },
-    { label: "Tue", value: 45 },
-    { label: "Wed", value: 30 },
-    { label: "Thu", value: 85 },
-    { label: "Fri", value: 65 },
-    { label: "Sat", value: 25 },
-    { label: "Sun", value: 50 },
+function AnimatedChart({ activity }) {
+  const data = activity?.length ? activity : [
+    { label: "Mon", value: 0 },
+    { label: "Tue", value: 0 },
+    { label: "Wed", value: 0 },
+    { label: "Thu", value: 0 },
+    { label: "Fri", value: 0 },
+    { label: "Sat", value: 0 },
+    { label: "Sun", value: 0 },
   ];
+
+  const maxCount = Math.max(...data.map(d => d.value), 5); // Ensure scale has a reasonable minimum ceiling
 
   return (
     <motion.div 
@@ -42,7 +44,7 @@ function AnimatedChart() {
             <div className="relative w-full max-w-[48px] flex-1 rounded-t-xl bg-muted/40 overflow-hidden ring-1 ring-border/50 transition-colors group-hover:bg-muted/60">
               <motion.div
                 initial={{ height: 0 }}
-                animate={{ height: `${item.value}%` }}
+                animate={{ height: `${(item.value / maxCount) * 100}%` }}
                 transition={{ duration: 1.2, delay: 0.5 + i * 0.1, type: "spring", bounce: 0.3 }}
                 className="absolute bottom-0 w-full rounded-t-xl bg-gradient-to-t from-primary to-sky-400 transition-transform duration-300 group-hover:scale-105"
               />
@@ -102,7 +104,7 @@ export default function AdminOverview() {
         ))}
       </div>
       
-      <AnimatedChart />
+      <AnimatedChart activity={stats?.activity} />
     </div>
   );
 }
