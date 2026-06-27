@@ -14,12 +14,14 @@ import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
+import CustomDropdown from "@/components/ui/CustomDropdown";
 import { formatDate } from "@/lib/utils";
 
 export default function DoctorPrescriptions() {
   const { token, user } = useAuth();
   const [appointments, setAppointments] = useState([]);
   const [prescriptions, setPrescriptions] = useState([]);
+  const [selectedAppointment, setSelectedAppointment] = useState("");
 
   useEffect(() => {
     if (!token || !user) return;
@@ -49,8 +51,10 @@ export default function DoctorPrescriptions() {
           ],
         },
       });
+      });
       setPrescriptions((items) => [normalizePrescription(prescription), ...items]);
       event.currentTarget.reset();
+      setSelectedAppointment("");
       toast.success("Prescription created");
     } catch (error) {
       toast.error(error.message);
@@ -83,25 +87,19 @@ export default function DoctorPrescriptions() {
           </div>
 
           <div className="grid gap-5">
-            <label className="grid gap-2 text-sm font-medium text-foreground">
-              Consultation / Appointment
-              <div className="relative">
-                <select
-                  name="appointmentId"
-                  className="h-12 w-full appearance-none rounded-xl border border-border/50 bg-background/50 px-4 text-sm font-medium outline-none transition-all focus:border-teal-500/50 focus:ring-4 focus:ring-teal-500/10"
-                >
-                  <option value="" disabled selected>Select an appointment...</option>
-                  {appointments.map((item) => (
-                    <option key={item._id} value={item._id}>
-                      {item.patientName} - {formatDate(item.appointmentDate)}
-                    </option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-muted-foreground">
-                  <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-              </div>
-            </label>
+            <div className="relative pt-2">
+              <input type="hidden" name="appointmentId" value={selectedAppointment} required />
+              <CustomDropdown
+                label="Consultation / Appointment"
+                placeholder="Select an appointment..."
+                value={selectedAppointment}
+                onChange={setSelectedAppointment}
+                options={appointments.map(item => ({
+                  value: item._id,
+                  label: `${item.patientName} - ${formatDate(item.appointmentDate)}`
+                }))}
+              />
+            </div>
 
             <div className="rounded-2xl border border-border/50 bg-muted/20 p-5 grid gap-4">
               <Input name="diagnosis" label="Diagnosis" required placeholder="e.g. Acute Bronchitis" />
