@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Activity, Users, ShieldCheck, Star } from "lucide-react";
 import { motion } from "framer-motion";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from "recharts";
 import SectionHeading from "@/components/shared/SectionHeading";
 import StatCard from "@/components/dashboardPage/StatCard";
 import { getStats } from "@/lib/api/healthcare";
@@ -17,8 +18,6 @@ function AnimatedChart({ activity }) {
     { label: "Sat", value: 0 },
     { label: "Sun", value: 0 },
   ];
-
-  const maxCount = Math.max(...data.map(d => d.value), 5); // Ensure scale has a reasonable minimum ceiling
 
   return (
     <motion.div 
@@ -38,26 +37,22 @@ function AnimatedChart({ activity }) {
         </div>
       </div>
       
-      <div className="flex h-56 items-end justify-between gap-3 sm:gap-6 border-b border-border/50 pb-2">
-        {data.map((item, i) => (
-          <div key={item.label} className="group relative flex flex-1 flex-col items-center gap-3">
-            {/* Tooltip for the value */}
-            <div className="absolute -top-10 scale-0 rounded-md bg-foreground px-2 py-1 text-xs font-bold text-background opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100">
-              {item.value} {item.value === 1 ? "Appt" : "Appts"}
-              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-foreground" />
-            </div>
-            
-            <div className="relative w-full max-w-[48px] flex-1 rounded-t-xl bg-muted/40 overflow-hidden ring-1 ring-border/50 transition-colors group-hover:bg-muted/60">
-              <motion.div
-                initial={{ height: "2%" }}
-                animate={{ height: `${Math.max((item.value / maxCount) * 100, 2)}%` }}
-                transition={{ duration: 1.2, delay: 0.5 + i * 0.1, type: "spring", bounce: 0.3 }}
-                className="absolute bottom-0 w-full rounded-t-xl bg-gradient-to-t from-primary to-sky-400 transition-transform duration-300 group-hover:scale-105"
-              />
-            </div>
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground transition-colors group-hover:text-foreground">{item.label}</span>
-          </div>
-        ))}
+      <div className="h-[280px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <defs>
+              <linearGradient id="colorActivity" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+            <XAxis dataKey="label" stroke="var(--muted-foreground)" fontSize={12} tickLine={false} axisLine={false} />
+            <YAxis stroke="var(--muted-foreground)" fontSize={12} tickLine={false} axisLine={false} />
+            <RechartsTooltip contentStyle={{ borderRadius: "8px", border: "1px solid var(--border)", backgroundColor: "var(--card)", color: "var(--foreground)" }} itemStyle={{ color: "#0ea5e9" }} />
+            <Area type="monotone" dataKey="value" name="Appointments" stroke="#0ea5e9" strokeWidth={3} fillOpacity={1} fill="url(#colorActivity)" />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
     </motion.div>
   );
