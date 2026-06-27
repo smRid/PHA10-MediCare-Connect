@@ -8,13 +8,15 @@ import { currency, formatDate } from "@/lib/utils";
 
 export default function PaymentHistory() {
   const { token } = useAuth();
-  const [payments, setPayments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!token) return;
+    setLoading(true);
     getPayments(token)
       .then(setPayments)
-      .catch(() => setPayments([]));
+      .catch(() => setPayments([]))
+      .finally(() => setLoading(false));
   }, [token]);
 
   return (
@@ -38,25 +40,43 @@ export default function PaymentHistory() {
             </tr>
           </thead>
           <tbody>
-            {payments.map((payment) => (
-              <tr key={payment._id} className="border-b border-border/70">
-                <td className="py-3 pr-4 font-mono text-xs">
-                  {payment.appointmentId}
-                </td>
-                <td className="py-3 pr-4 font-mono text-xs">
-                  {payment.transactionId || "txn_placeholder"}
-                </td>
-                <td className="py-3 pr-4 font-semibold">
-                  {currency(payment.amount)}
-                </td>
-                <td className="py-3 pr-4">
-                  {formatDate(payment.paymentDate || payment.createdAt)}
-                </td>
-                <td className="py-3 pr-4">
-                  <StatusPill status={payment.status || "paid"} />
+            {loading ? (
+              Array.from({ length: 4 }).map((_, i) => (
+                <tr key={`skeleton-${i}`} className="border-b border-border/70 animate-pulse">
+                  <td className="py-4 pr-4"><div className="h-4 w-24 bg-muted/40 rounded"></div></td>
+                  <td className="py-4 pr-4"><div className="h-4 w-32 bg-muted/40 rounded"></div></td>
+                  <td className="py-4 pr-4"><div className="h-4 w-16 bg-muted/40 rounded"></div></td>
+                  <td className="py-4 pr-4"><div className="h-4 w-28 bg-muted/40 rounded"></div></td>
+                  <td className="py-4 pr-4"><div className="h-6 w-20 bg-muted/40 rounded-full"></div></td>
+                </tr>
+              ))
+            ) : payments.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="py-12 text-center text-muted-foreground">
+                  <p>No payment history found.</p>
                 </td>
               </tr>
-            ))}
+            ) : (
+              payments.map((payment) => (
+                <tr key={payment._id} className="border-b border-border/70 hover:bg-muted/30 transition-colors">
+                  <td className="py-3 pr-4 font-mono text-xs">
+                    {payment.appointmentId}
+                  </td>
+                  <td className="py-3 pr-4 font-mono text-xs">
+                    {payment.transactionId || "txn_placeholder"}
+                  </td>
+                  <td className="py-3 pr-4 font-semibold">
+                    {currency(payment.amount)}
+                  </td>
+                  <td className="py-3 pr-4">
+                    {formatDate(payment.paymentDate || payment.createdAt)}
+                  </td>
+                  <td className="py-3 pr-4">
+                    <StatusPill status={payment.status || "paid"} />
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

@@ -16,15 +16,18 @@ export default function PatientAppointments() {
   const { token } = useAuth();
   const [appointments, setAppointments] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!token) return;
+    setLoading(true);
     getAppointments(token)
       .then(setAppointments)
       .catch((err) => {
         toast.error("Failed to fetch appointments: " + err.message);
         setAppointments([]);
-      });
+      })
+      .finally(() => setLoading(false));
   }, [token]);
 
   const updateAppointment = async (id, updates) => {
@@ -66,7 +69,42 @@ export default function PatientAppointments() {
 
       <div className="grid gap-4 relative z-10">
         <AnimatePresence mode="popLayout">
-          {appointments.map((item, index) => (
+          {loading ? (
+            Array.from({ length: 3 }).map((_, index) => (
+              <motion.div
+                key={`skeleton-${index}`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ delay: index * 0.05, duration: 0.4 }}
+                className="flex flex-col gap-5 rounded-2xl border border-border/50 bg-background/50 p-5 animate-pulse"
+              >
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="flex items-start gap-4">
+                    <div className="hidden sm:block size-12 shrink-0 rounded-full bg-muted/40"></div>
+                    <div className="flex flex-col gap-3 w-full sm:w-auto mt-1">
+                      <div className="h-6 w-48 rounded bg-muted/40"></div>
+                      <div className="flex flex-wrap gap-3 mt-1">
+                        <div className="h-4 w-24 rounded bg-muted/40"></div>
+                        <div className="h-4 w-20 rounded bg-muted/40"></div>
+                        <div className="h-6 w-12 rounded bg-muted/40"></div>
+                      </div>
+                      <div className="h-10 w-[80%] sm:w-64 rounded-xl bg-muted/40 mt-1"></div>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2 lg:flex-col lg:items-end mt-1">
+                    <div className="h-6 w-20 rounded-full bg-muted/40"></div>
+                    <div className="h-6 w-16 rounded-full bg-muted/40"></div>
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-3 border-t border-border/50 pt-4 mt-1">
+                  <div className="h-9 w-28 rounded bg-muted/40"></div>
+                  <div className="h-9 w-36 rounded bg-muted/40"></div>
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            appointments.map((item, index) => (
             <motion.article
               key={item._id}
               initial={{ opacity: 0, x: -20 }}
@@ -140,10 +178,10 @@ export default function PatientAppointments() {
                 </div>
               )}
             </motion.article>
-          ))}
+          )))}
         </AnimatePresence>
         
-        {appointments.length === 0 && (
+        {!loading && appointments.length === 0 && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
