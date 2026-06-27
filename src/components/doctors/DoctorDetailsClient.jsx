@@ -39,6 +39,7 @@ export default function DoctorDetailsClient({ doctorId }) {
 
   const submit = async (event) => {
     event.preventDefault();
+    const form = event.target; // Save reference
 
     if (!user) {
       toast.info("Please login as a patient before booking");
@@ -49,7 +50,7 @@ export default function DoctorDetailsClient({ doctorId }) {
       return;
     }
 
-    const form = Object.fromEntries(new FormData(event.currentTarget));
+    const formData = Object.fromEntries(new FormData(form));
     setSubmitting(true);
     try {
       const appointment = await apiFetch("/appointments", {
@@ -57,9 +58,9 @@ export default function DoctorDetailsClient({ doctorId }) {
         token,
         body: {
           doctorId: doctor._id,
-          date: form.appointmentDate,
-          time: form.appointmentTime,
-          symptoms: form.symptoms,
+          date: formData.appointmentDate,
+          time: formData.appointmentTime,
+          symptoms: formData.symptoms,
         },
       });
       const intent = await apiFetch("/payments/create-intent", {
@@ -72,12 +73,18 @@ export default function DoctorDetailsClient({ doctorId }) {
         token,
         body: {
           appointmentId: appointment._id,
-          transactionId: intent.transactionId,
+          transactionId: intent.transactionId || "stripe_checkout",
           status: "paid",
         },
       });
+      
+      if (intent.url) {
+        window.location.href = intent.url;
+        return;
+      }
+      
       toast.success("Appointment booked and payment recorded");
-      event.currentTarget.reset();
+      form.reset();
     } catch (error) {
       toast.error(error.message);
     } finally {
