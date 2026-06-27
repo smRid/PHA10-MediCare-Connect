@@ -1,51 +1,73 @@
+<div align="center">
+
 # MediCare Connect
 
-MediCare Connect is a healthcare management web application for finding doctors, booking appointments, managing payments, and coordinating patient, doctor, and admin workflows from role-based dashboards.
+### Premium Healthcare Appointment & Management Platform
+
+A polished full-stack healthcare platform where patients can discover verified doctors, book appointments, manage payments and prescriptions, while doctors and administrators manage schedules, requests, users, and analytics.
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Now-2ea44f?style=for-the-badge)](https://medicareconnectweb.vercel.app/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![Vercel](https://img.shields.io/badge/Vercel-Deployed-000?style=for-the-badge&logo=vercel&logoColor=white)](https://medicareconnectweb.vercel.app/)
+[![Deployed on Vercel](https://img.shields.io/badge/Vercel-Deployed-000?style=for-the-badge&logo=vercel&logoColor=white)](https://medicareconnectweb.vercel.app/)
 
-## Live Links
+</div>
 
-- Frontend: [https://medicareconnectweb.vercel.app/](https://medicareconnectweb.vercel.app/)
-- Backend API: [https://medicareconnectwebserver.vercel.app/](https://medicareconnectwebserver.vercel.app/)
-- Backend repository: [https://github.com/smRid/MediCare-Connect-Server](https://github.com/smRid/MediCare-Connect-Server)
+---
 
 ## Preview
 
 <p align="center">
-  <img src="./public/preview1.png" alt="MediCare Connect home page preview" width="1000" />
-  <img src="./public/preview2.png" alt="MediCare Connect doctors page preview" width="1000" />
-  <img src="./public/preview3.png" alt="MediCare Connect dashboard preview" width="1000" />
+  <img src="./public/preview1.png" alt="MediCare Connect preview 1" width="1000" style="margin-bottom: 20px" />
+  <img src="./public/preview2.png" alt="MediCare Connect preview 2" width="1000" style="margin-bottom: 20px" />
+  <img src="./public/preview3.png" alt="MediCare Connect preview 3" width="1000" />
 </p>
+
+> **Live Site:** [https://medicareconnectweb.vercel.app/](https://medicareconnectweb.vercel.app/)
+> **Server API:** [https://medicareconnectwebserver.vercel.app/](https://medicareconnectwebserver.vercel.app/)
+> **Server Repo:** [https://github.com/smRid/MediCare-Connect-Server](https://github.com/smRid/MediCare-Connect-Server)
+
+---
 
 ## Features
 
-- Public healthcare landing page with doctor discovery, service highlights, patient stories, and responsive navigation.
-- Doctor search and profile pages with specialization details, availability, consultation fees, reviews, and appointment booking.
-- Appointment flow that creates appointments, payment intents, and payment records through the backend API.
-- Better Auth authentication with email/password and Google sign-in support.
-- Patient dashboard for overview metrics, appointments, payment history, and reviews.
-- Doctor dashboard for schedule management, appointment requests, prescriptions, and profile workflows.
-- Admin dashboard for users, doctors, appointments, payments, contact responses, and analytics.
-- Responsive UI built with Tailwind CSS, Framer Motion, Lucide icons, Recharts, and React Toastify.
+| Feature | Description |
+| :--- | :--- |
+| **Doctor Discovery** | Browse, filter, and review verified doctors across multiple healthcare specializations. |
+| **Appointment Booking** | Patients can choose a doctor, select available dates and slots, describe symptoms, and book appointments. |
+| **Payment Workflow** | Appointment payments are created and recorded through the backend payment API. |
+| **Patient Dashboard** | Patients can track appointments, payment history, reviews, and healthcare activity from one place. |
+| **Doctor Dashboard** | Doctors can manage schedules, review appointment requests, maintain profiles, and create prescriptions. |
+| **Admin Dashboard** | Admins can manage users, verify doctors, monitor appointments, review payments, handle contacts, and inspect analytics. |
+| **Authentication Gate** | Better Auth powers email/password login, Google OAuth, sessions, and protected role-based routes. |
+| **Responsive Interface** | Tailwind CSS, Framer Motion, Lucide icons, and theme support create a clean experience across devices. |
+| **Analytics Ready** | Recharts-powered dashboard views help visualize payments, appointments, doctors, and platform activity. |
+
+---
 
 ## Tech Stack
 
-| Area | Technology |
-| --- | --- |
-| Framework | Next.js 16 App Router |
-| UI | React 19, Tailwind CSS 4, Framer Motion |
-| Auth | Better Auth, Google OAuth |
-| Database/Auth storage | MongoDB |
-| Charts | Recharts |
-| Icons | Lucide React |
-| Notifications | React Toastify |
-| Deployment | Vercel |
+<div align="center">
+
+| Technology | Purpose |
+| :---: | :--- |
+| **Next.js 16** | App Router framework for routing, rendering, metadata, and production builds. |
+| **React 19** | Component-driven user interface and client-side interactions. |
+| **Tailwind CSS 4** | Utility-first styling for responsive layouts and custom themes. |
+| **Better Auth** | Authentication, sessions, users, Google OAuth, and protected app access. |
+| **MongoDB** | Database used by the authentication layer and backend data workflows. |
+| **Backend API** | External MediCare Connect server for doctors, appointments, payments, reviews, and analytics. |
+| **Framer Motion** | Smooth transitions, page animations, and interactive UI motion. |
+| **Recharts** | Data visualization for admin analytics and dashboard reporting. |
+| **React Toastify** | User feedback for success, loading, and error states. |
+| **Lucide React** | Consistent icon system throughout the application. |
+| **Vercel** | Frontend deployment and production hosting. |
+
+</div>
+
+---
 
 ## Project Structure
 
@@ -82,9 +104,22 @@ PHA10-MediCare-Connect/
 `-- README.md
 ```
 
+---
+
+## Design Highlights
+
+- **Healthcare-focused landing page** with a polished hero section, platform statistics, featured doctors, and service highlights.
+- **Role-based dashboards** designed separately for patients, doctors, and administrators.
+- **Responsive navigation** that adapts from desktop navigation to mobile-friendly menus and dashboard sidebars.
+- **Modern visual system** using custom Tailwind tokens, light/dark theme support, cards, badges, status pills, and subtle motion.
+- **Consistent interactions** with Lucide icons, animated actions, reusable UI components, and toast feedback.
+- **Data-rich admin views** with charts, tables, status indicators, and management workflows.
+
+---
+
 ## Environment Variables
 
-Create a `.env.local` file in the project root.
+Create a `.env.local` file in the project root and configure these values:
 
 ```env
 # App URLs
@@ -107,11 +142,11 @@ GOOGLE_CLIENT_SECRET=replace-with-google-client-secret
 
 Notes:
 
-- `NEXT_PUBLIC_API_BASE_URL` can point to either the API origin or the `/api` path. The app normalizes it automatically.
+- `NEXT_PUBLIC_API_BASE_URL` may point to the backend origin or directly to its `/api` path. The client normalizes it automatically.
 - `MONGO_DB_URI` is also supported as an alternative to `MONGODB_URI`.
-- Google OAuth values are required only when Google sign-in is enabled.
+- Google OAuth credentials are required only when Google sign-in is enabled.
 
-For production, configure the same variables in Vercel. Typical production values:
+For production, set:
 
 ```env
 NEXT_PUBLIC_APP_URL=https://medicareconnectweb.vercel.app
@@ -119,14 +154,9 @@ NEXT_PUBLIC_API_BASE_URL=https://medicareconnectwebserver.vercel.app/api
 BETTER_AUTH_URL=https://medicareconnectweb.vercel.app
 ```
 
+---
+
 ## Getting Started
-
-Requirements:
-
-- Node.js 20.9 or newer
-- npm
-- MongoDB connection string
-- Running backend API server
 
 Install dependencies:
 
@@ -134,13 +164,17 @@ Install dependencies:
 npm install
 ```
 
-Start the development server:
+Run the development server:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open the app:
+
+```text
+http://localhost:3000
+```
 
 Run linting:
 
@@ -154,38 +188,55 @@ Build for production:
 npm run build
 ```
 
-Start the production server:
+Run the production server:
 
 ```bash
 npm start
 ```
 
+---
+
 ## Main Routes
 
 | Route | Purpose |
-| --- | --- |
+| :--- | :--- |
 | `/` | Home page |
 | `/find-doctors` | Doctor browsing and search |
-| `/doctors/[id]` | Doctor profile and booking |
-| `/about` | About page |
-| `/contact` | Contact page |
-| `/login` | Sign in |
-| `/register` | Create account |
+| `/doctors/[id]` | Doctor profile, reviews, and booking |
+| `/about` | Platform overview |
+| `/contact` | Contact form |
+| `/login` | User sign-in |
+| `/register` | User registration |
 | `/dashboard/patient` | Patient dashboard |
 | `/dashboard/doctor` | Doctor dashboard |
 | `/dashboard/admin` | Admin dashboard |
 
+---
+
 ## Deployment
 
-The frontend is deployed on Vercel. Before deploying:
+The application is deployed on **Vercel**:
 
-1. Add all production environment variables in the Vercel project settings.
-2. Set `NEXT_PUBLIC_API_BASE_URL` to the deployed backend API.
-3. Set `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL` to the deployed frontend URL.
-4. Allow the production deployment to access MongoDB.
-5. Configure Google OAuth redirect origins for the production domain.
-6. Redeploy after changing environment variables.
+**Frontend Live URL:** [https://medicareconnectweb.vercel.app/](https://medicareconnectweb.vercel.app/)
+**Backend Live URL:** [https://medicareconnectwebserver.vercel.app/](https://medicareconnectwebserver.vercel.app/)
+**Backend Repository:** [https://github.com/smRid/MediCare-Connect-Server](https://github.com/smRid/MediCare-Connect-Server)
 
-## Credits
+For deployment:
 
-Built with Next.js, React, Tailwind CSS, Better Auth, MongoDB, and Vercel.
+1. Add all production environment variables in Vercel project settings.
+2. Set `BETTER_AUTH_URL` to `https://medicareconnectweb.vercel.app`.
+3. Set `NEXT_PUBLIC_APP_URL` to `https://medicareconnectweb.vercel.app`.
+4. Set `NEXT_PUBLIC_API_BASE_URL` to `https://medicareconnectwebserver.vercel.app/api`.
+5. Configure Google OAuth authorized origins and redirect URLs for the production domain.
+6. Allow Vercel/production access in MongoDB Atlas Network Access.
+7. Redeploy after changing environment variables.
+
+---
+
+<div align="center">
+
+**If you found this project useful, consider giving it a star.**
+
+Made with care using Next.js, React, Tailwind CSS, Better Auth, MongoDB, and Vercel.
+
+</div>
