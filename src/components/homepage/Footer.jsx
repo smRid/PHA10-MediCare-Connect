@@ -49,7 +49,7 @@ export default function Footer() {
               <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <PhoneCall className="size-4" />
               </span>
-              +1 800 555 CARE
+              +1 800 555
             </span>
             <span className="flex items-center gap-3">
               <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
