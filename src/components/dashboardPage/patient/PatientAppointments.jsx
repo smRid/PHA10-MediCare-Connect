@@ -111,15 +111,15 @@ export default function PatientAppointments() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ delay: index * 0.05, duration: 0.4 }}
-              className="group flex flex-col gap-5 rounded-2xl border border-border/50 bg-background/50 p-5 transition-all duration-300 hover:bg-muted/30 hover:shadow-md hover:border-primary/30"
+              className="flex flex-col gap-5 rounded-2xl border border-border/50 bg-background/50 p-5 transition-all duration-300"
             >
               <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                 <div className="flex items-start gap-4">
-                  <div className="hidden sm:flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/5 text-primary border border-primary/10 transition-colors group-hover:bg-primary/10">
+                  <div className="hidden sm:flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/5 text-primary border border-primary/10 transition-colors">
                     <User className="size-5" />
                   </div>
                   <div>
-                    <h3 className="font-heading text-xl font-bold text-foreground transition-colors group-hover:text-primary">
+                    <h3 className="font-heading text-xl font-bold text-foreground transition-colors">
                       {item.doctorName}
                     </h3>
                     <div className="mt-2 flex flex-wrap items-center gap-3 text-sm font-medium text-muted-foreground">
