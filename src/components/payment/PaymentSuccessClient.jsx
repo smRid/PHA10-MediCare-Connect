@@ -20,7 +20,7 @@ export default function PaymentSuccessClient() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          router.push("/dashboard");
+          window.location.href = "/dashboard";
           return 0;
         }
         return prev - 1;
@@ -60,7 +60,7 @@ export default function PaymentSuccessClient() {
 
         <div className="flex flex-col gap-3">
           <Button
-            onClick={() => router.push("/dashboard")}
+            onClick={() => { window.location.href = "/dashboard"; }}
             className="h-12 w-full bg-gradient-to-r from-primary to-sky-600 font-bold text-white shadow-lg transition-transform hover:scale-[1.02]"
           >
             Go to Dashboard Now

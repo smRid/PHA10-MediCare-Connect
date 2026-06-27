@@ -134,13 +134,13 @@ export const getReviews = (params = {}) => {
 };
 
 export const getAppointments = (token) => {
-  return apiFetch("/appointments", { token, cache: "no-store" }).then((items) =>
+  return apiFetch(`/appointments?_t=${Date.now()}`, { token, cache: "no-store" }).then((items) =>
     collectionFromPayload(items, "appointments").map(normalizeAppointment),
   );
 };
 
 export const getPayments = (token) => {
-  return apiFetch("/payments", { token, cache: "no-store" }).then((items) =>
+  return apiFetch(`/payments?_t=${Date.now()}`, { token, cache: "no-store" }).then((items) =>
     collectionFromPayload(items, "payments").map(normalizePayment),
   );
 };
