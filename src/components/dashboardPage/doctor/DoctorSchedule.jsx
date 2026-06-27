@@ -79,7 +79,16 @@ export default function DoctorSchedule() {
           </div>
           <form onSubmit={(event) => addValue(event, setDays, days)} className="flex gap-2">
             <div className="flex-1">
-              <Input name="value" placeholder="e.g. Monday" />
+              <select
+                name="value"
+                defaultValue=""
+                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              >
+                <option value="" disabled>Select a day...</option>
+                {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
+                  <option key={day} value={day}>{day}</option>
+                ))}
+              </select>
             </div>
             <Button type="submit" className="shrink-0 bg-teal-600 hover:bg-teal-700 text-white border-0 shadow-lg shadow-teal-500/20">
               <Plus className="size-4 mr-1" /> Add
@@ -114,7 +123,16 @@ export default function DoctorSchedule() {
           </div>
           <form onSubmit={(event) => addValue(event, setSlots, slots)} className="flex gap-2">
             <div className="flex-1">
-              <Input name="value" placeholder="e.g. 09:00 AM" />
+              <select
+                name="value"
+                defaultValue=""
+                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              >
+                <option value="" disabled>Select a time slot...</option>
+                {["08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM", "08:00 PM"].map(time => (
+                  <option key={time} value={time}>{time}</option>
+                ))}
+              </select>
             </div>
             <Button type="submit" className="shrink-0 bg-teal-600 hover:bg-teal-700 text-white border-0 shadow-lg shadow-teal-500/20">
               <Plus className="size-4 mr-1" /> Add
