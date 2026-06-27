@@ -33,7 +33,7 @@ export default function StatsRow() {
     <section className="relative px-4 py-20 sm:px-6 lg:px-8 bg-background">
       <div className="mx-auto max-w-7xl mb-12">
         <SectionHeading
-          align="center"
+          align="left"
           eyebrow="Our Impact"
           title="Empowering Healthcare"
           description="Join thousands of satisfied patients and verified doctors who trust our platform for seamless medical care."
