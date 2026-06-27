@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth-context";
 import SectionHeading from "@/components/shared/SectionHeading";
 import LoadingState from "@/components/shared/LoadingState";
 
+const roleColors = { admin: "#f59e0b", doctor: "#6366f1", patient: "#10b981" };
 const COLORS = ["#0ea5e9", "#10b981", "#6366f1", "#f59e0b"];
 
 export default function AdminAnalytics() {
@@ -50,7 +51,7 @@ export default function AdminAnalytics() {
                   nameKey="_id"
                 >
                   {(data.usersByRole || []).map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={roleColors[entry._id] || COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip
@@ -69,9 +70,9 @@ export default function AdminAnalytics() {
               <BarChart data={data.topDoctors || []} layout="vertical" margin={{ top: 5, right: 20, left: 40, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="var(--border)" />
                 <XAxis type="number" domain={[0, 5]} stroke="var(--muted-foreground)" fontSize={12} />
-                <YAxis type="category" dataKey="doctorName" stroke="var(--muted-foreground)" fontSize={12} width={100} />
+                <YAxis type="category" dataKey="doctorName" stroke="var(--muted-foreground)" fontSize={12} width={140} tickFormatter={(val) => val || "Unknown"} />
                 <Tooltip contentStyle={{ borderRadius: "8px", border: "1px solid var(--border)", backgroundColor: "var(--card)" }} />
-                <Bar dataKey="averageRating" fill="#0ea5e9" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="ratingAverage" fill="#0ea5e9" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -88,7 +89,7 @@ export default function AdminAnalytics() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                <XAxis dataKey="_id" stroke="var(--muted-foreground)" fontSize={12} tickFormatter={(val) => val.charAt(0).toUpperCase() + val.slice(1)} />
+                <XAxis dataKey="_id" stroke="var(--muted-foreground)" fontSize={12} tickFormatter={(val) => val ? val.charAt(0).toUpperCase() + val.slice(1) : ""} />
                 <YAxis stroke="var(--muted-foreground)" fontSize={12} />
                 <Tooltip contentStyle={{ borderRadius: "8px", border: "1px solid var(--border)", backgroundColor: "var(--card)" }} />
                 <Area type="monotone" dataKey="count" stroke="#10b981" fillOpacity={1} fill="url(#colorCount)" />
@@ -102,7 +103,7 @@ export default function AdminAnalytics() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.paymentsByStatus || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                <XAxis dataKey="_id" stroke="var(--muted-foreground)" fontSize={12} tickFormatter={(val) => val.charAt(0).toUpperCase() + val.slice(1)} />
+                <XAxis dataKey="_id" stroke="var(--muted-foreground)" fontSize={12} tickFormatter={(val) => val ? val.charAt(0).toUpperCase() + val.slice(1) : ""} />
                 <YAxis stroke="var(--muted-foreground)" fontSize={12} />
                 <Tooltip contentStyle={{ borderRadius: "8px", border: "1px solid var(--border)", backgroundColor: "var(--card)" }} />
                 <Bar dataKey="count" fill="#6366f1" radius={[4, 4, 0, 0]} />

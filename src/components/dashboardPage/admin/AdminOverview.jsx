@@ -41,10 +41,16 @@ function AnimatedChart({ activity }) {
       <div className="flex h-56 items-end justify-between gap-3 sm:gap-6 border-b border-border/50 pb-2">
         {data.map((item, i) => (
           <div key={item.label} className="group relative flex flex-1 flex-col items-center gap-3">
+            {/* Tooltip for the value */}
+            <div className="absolute -top-10 scale-0 rounded-md bg-foreground px-2 py-1 text-xs font-bold text-background opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100">
+              {item.value} {item.value === 1 ? "Appt" : "Appts"}
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-foreground" />
+            </div>
+            
             <div className="relative w-full max-w-[48px] flex-1 rounded-t-xl bg-muted/40 overflow-hidden ring-1 ring-border/50 transition-colors group-hover:bg-muted/60">
               <motion.div
-                initial={{ height: 0 }}
-                animate={{ height: `${(item.value / maxCount) * 100}%` }}
+                initial={{ height: "4px" }}
+                animate={{ height: `max(4px, ${(item.value / maxCount) * 100}%)` }}
                 transition={{ duration: 1.2, delay: 0.5 + i * 0.1, type: "spring", bounce: 0.3 }}
                 className="absolute bottom-0 w-full rounded-t-xl bg-gradient-to-t from-primary to-sky-400 transition-transform duration-300 group-hover:scale-105"
               />
