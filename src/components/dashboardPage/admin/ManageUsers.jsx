@@ -2,18 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Search, Trash2, UserCheck, UserX } from "lucide-react";
+import { Search, Trash2, UserCheck, UserX, Eye } from "lucide-react";
 import { getUsers, deleteUser, updateUser } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import SectionHeading from "@/components/shared/SectionHeading";
 import StatusPill from "@/components/shared/StatusPill";
 import LoadingState from "@/components/shared/LoadingState";
+import Modal from "@/components/ui/Modal";
 
 export default function ManageUsers() {
   const { token } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -115,6 +118,16 @@ export default function ManageUsers() {
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-2">
                       <button 
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setIsModalOpen(true);
+                        }}
+                        title="View Details"
+                        className="flex size-9 items-center justify-center rounded-full bg-blue-500/10 text-blue-500 transition-all hover:bg-blue-500 hover:text-white hover:shadow-lg hover:shadow-blue-500/20 hover:scale-105"
+                      >
+                        <Eye className="size-4" />
+                      </button>
+                      <button 
                         onClick={() => handleSuspend(user._id, user.status)} 
                         title={user.status === "suspended" ? "Unsuspend User" : "Suspend User"}
                         className={`flex size-9 items-center justify-center rounded-full transition-all hover:scale-105 hover:text-white hover:shadow-lg ${
@@ -150,6 +163,74 @@ export default function ManageUsers() {
           </table>
         </div>
       </div>
+
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedUser(null);
+        }} 
+        title="User Details"
+      >
+        {selectedUser && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-4 border-b border-border/50 pb-4">
+              <div className="flex size-16 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary ring-2 ring-primary/20">
+                {selectedUser.name?.charAt(0) || "U"}
+              </div>
+              <div>
+                <h4 className="font-bold text-lg">{selectedUser.name}</h4>
+                <div className="mt-1 flex gap-2">
+                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${
+                    selectedUser.role === 'admin' ? 'bg-violet-500/10 text-violet-600' : 
+                    selectedUser.role === 'doctor' ? 'bg-teal-500/10 text-teal-600' : 
+                    'bg-indigo-500/10 text-indigo-600'
+                  }`}>
+                    {selectedUser.role}
+                  </span>
+                  <StatusPill status={selectedUser.status || "active"} />
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="rounded-xl border border-border/50 bg-muted/20 p-3">
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Email</span>
+                <span className="font-medium truncate block" title={selectedUser.email || "N/A"}>{selectedUser.email || "N/A"}</span>
+              </div>
+              <div className="rounded-xl border border-border/50 bg-muted/20 p-3">
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Role</span>
+                <span className="font-medium block capitalize">{selectedUser.role || "N/A"}</span>
+              </div>
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-4 border-t border-border/50 mt-4">
+              <button 
+                onClick={() => {
+                  handleSuspend(selectedUser._id, selectedUser.status);
+                  setIsModalOpen(false);
+                }} 
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all shadow-lg text-white ${
+                  selectedUser.status === "suspended" 
+                    ? "bg-green-500 hover:bg-green-600 shadow-green-500/20" 
+                    : "bg-orange-500 hover:bg-orange-600 shadow-orange-500/20"
+                }`}
+              >
+                {selectedUser.status === "suspended" ? <><UserCheck className="size-4" /> Unsuspend</> : <><UserX className="size-4" /> Suspend</>}
+              </button>
+              <button 
+                onClick={() => {
+                  handleDelete(selectedUser._id);
+                  setIsModalOpen(false);
+                }} 
+                className="flex items-center gap-2 rounded-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 text-sm font-bold transition-all shadow-lg shadow-red-500/20"
+              >
+                <Trash2 className="size-4" /> Delete
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
