@@ -70,7 +70,7 @@ export default function Footer() {
           <h3 className="font-heading text-base font-bold text-foreground">Emergency Hotline</h3>
           <div className="mt-5 overflow-hidden rounded-xl bg-gradient-to-br from-primary/10 to-sky-500/5 p-4 ring-1 ring-primary/20 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
             <p className="font-heading text-xl font-extrabold text-primary">
-              911 / +1 800 CARE
+              +1 800 354-8138
             </p>
           </div>
           <div className="mt-6 flex gap-3">

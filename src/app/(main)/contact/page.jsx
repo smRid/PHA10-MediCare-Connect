@@ -40,7 +40,7 @@ export default function ContactPage() {
               {
                 icon: PhoneCall,
                 label: "Emergency hotline",
-                value: "+1 800 555 CARE",
+                value: "+1 800 555",
               },
               {
                 icon: Mail,
