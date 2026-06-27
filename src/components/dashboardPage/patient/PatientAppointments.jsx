@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
-import { CalendarClock, CalendarDays, Clock, User, FileText } from "lucide-react";
+import { CalendarClock, CalendarDays, Clock, User, FileText, X } from "lucide-react";
 import { apiFetch } from "@/lib/api/base";
-import { getAppointments, normalizeAppointment } from "@/lib/api/healthcare";
+import { getAppointments, getPrescriptions, normalizeAppointment } from "@/lib/api/healthcare";
 import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -87,18 +87,26 @@ function RescheduleForm({ item, onSave, onCancel }) {
 }
 
 export default function PatientAppointments() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [appointments, setAppointments] = useState([]);
-  const [editingId, setEditingId] = useState(null);
+  const [prescriptions, setPrescriptions] = useState([]);
+  const [selectedPrescription, setSelectedPrescription] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
     if (!token) return;
     setLoading(true);
-    getAppointments(token)
-      .then(setAppointments)
+    Promise.all([
+      getAppointments(token),
+      getPrescriptions(token)
+    ])
+      .then(([appts, rx]) => {
+        setAppointments(appts || []);
+        setPrescriptions(rx || []);
+      })
       .catch((err) => {
-        toast.error("Failed to fetch appointments: " + err.message);
+        toast.error("Failed to fetch data: " + err.message);
         setAppointments([]);
       })
       .finally(() => setLoading(false));
@@ -225,16 +233,32 @@ export default function PatientAppointments() {
                 />
               ) : (
                 <div className="flex flex-wrap items-center gap-3 border-t border-border/50 pt-4 mt-1">
-                  <Button variant="outline" className="h-9 px-4 text-xs" onClick={() => setEditingId(item._id)}>
-                    Reschedule
-                  </Button>
-                  <Button
-                    variant="danger"
-                    className="h-9 px-4 text-xs"
-                    onClick={() => updateAppointment(item._id, { status: "cancelled" })}
-                  >
-                    Cancel Appointment
-                  </Button>
+                  {item.appointmentStatus === "completed" ? (
+                    (() => {
+                      const rx = prescriptions.find(p => p.appointmentId === item._id || p.appointmentId?._id === item._id);
+                      return rx ? (
+                        <Button variant="outline" className="h-9 px-4 text-xs border-teal-500/30 text-teal-600 hover:bg-teal-500/10 dark:text-teal-400" onClick={() => setSelectedPrescription(rx)}>
+                          <FileText className="size-3.5 mr-1.5" />
+                          View Prescription
+                        </Button>
+                      ) : (
+                        <p className="text-xs text-muted-foreground italic">No prescription attached yet</p>
+                      );
+                    })()
+                  ) : (
+                    <>
+                      <Button variant="outline" className="h-9 px-4 text-xs" onClick={() => setEditingId(item._id)}>
+                        Reschedule
+                      </Button>
+                      <Button
+                        variant="danger"
+                        className="h-9 px-4 text-xs"
+                        onClick={() => updateAppointment(item._id, { status: "cancelled" })}
+                      >
+                        Cancel Appointment
+                      </Button>
+                    </>
+                  )}
                 </div>
               )}
             </motion.article>
@@ -248,16 +272,83 @@ export default function PatientAppointments() {
             transition={{ delay: 0.2 }}
             className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-border/50 bg-background/30 p-12 text-center"
           >
-            <div className="mb-5 flex size-16 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/20">
-              <CalendarClock className="size-8" />
-            </div>
-            <h3 className="font-heading text-lg font-bold text-foreground">No appointments yet</h3>
-            <p className="mt-2 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              You haven't booked any appointments. Search for a doctor to get started with your care journey.
+            <CalendarClock className="mb-4 size-12 text-muted-foreground/50" />
+            <h3 className="font-heading text-xl font-bold text-foreground">No appointments found</h3>
+            <p className="mt-2 text-sm text-muted-foreground max-w-md">
+              You haven't booked any appointments yet. Head over to the Find Doctors page to schedule your first consultation.
             </p>
           </motion.div>
         )}
       </div>
+
+      <AnimatePresence>
+        {selectedPrescription && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedPrescription(null)}
+              className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative z-10 w-full max-w-lg overflow-hidden rounded-3xl border border-border/50 bg-card p-6 sm:p-8 shadow-2xl"
+            >
+              <button
+                onClick={() => setSelectedPrescription(null)}
+                className="absolute right-4 top-4 rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                <X className="size-5" />
+              </button>
+              
+              <div className="mb-6 pr-8">
+                <h2 className="font-heading text-2xl font-bold text-foreground">Prescription Details</h2>
+                <p className="text-sm text-muted-foreground mt-1">Prescribed by {selectedPrescription.doctorName}</p>
+              </div>
+              
+              <div className="grid gap-6">
+                <div>
+                  <h3 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Diagnosis</h3>
+                  <p className="rounded-xl border border-border/50 bg-muted/30 p-4 text-sm text-foreground">
+                    {selectedPrescription.diagnosis || "No diagnosis provided"}
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Medications</h3>
+                  <div className="grid gap-3">
+                    {selectedPrescription.medications?.length > 0 ? (
+                      selectedPrescription.medications.map((med, i) => (
+                        <div key={i} className="rounded-xl border border-border/50 bg-background p-4 shadow-sm">
+                          <p className="font-semibold text-foreground text-sm">{med.name}</p>
+                          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
+                            <span><strong className="text-foreground">Dosage:</strong> {med.dosage}</span>
+                            <span><strong className="text-foreground">Duration:</strong> {med.duration}</span>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-muted-foreground italic">No medications listed</p>
+                    )}
+                  </div>
+                </div>
+                
+                {selectedPrescription.notes && (
+                  <div>
+                    <h3 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Additional Notes</h3>
+                    <p className="rounded-xl border border-border/50 bg-muted/30 p-4 text-sm text-foreground whitespace-pre-wrap">
+                      {selectedPrescription.notes}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 }

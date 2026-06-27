@@ -10,6 +10,7 @@ import { useAuth } from "@/lib/auth-context";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import PasswordInput from "@/components/ui/PasswordInput";
+import CustomDropdown from "@/components/ui/CustomDropdown";
 import BrandMark from "@/components/shared/BrandMark";
 
 export default function LoginPage() {
@@ -109,15 +110,15 @@ export default function LoginPage() {
         <span className="h-px flex-1 bg-border/80" />
       </div>
 
-      <div className="grid gap-3">
-        <select
+      <div className="grid gap-3 relative z-10">
+        <CustomDropdown
           value={role}
-          onChange={(event) => setRole(event.target.value)}
-          className="h-11 rounded-xl border border-input/60 bg-card/50 px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-[4px] focus:ring-primary/15 hover:border-primary/40"
-        >
-          <option value="patient">Google as patient</option>
-          <option value="doctor">Google as doctor</option>
-        </select>
+          onChange={setRole}
+          options={[
+            { value: "patient", label: "Google as patient" },
+            { value: "doctor", label: "Google as doctor" }
+          ]}
+        />
         <Button
           variant="outline"
           size="lg"
