@@ -144,9 +144,11 @@ export default function DoctorSchedule() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="rounded-3xl border border-border/50 bg-card/60 backdrop-blur-xl p-6 sm:p-8 shadow-sm relative overflow-hidden"
+      className="rounded-3xl border border-border/50 bg-card/60 backdrop-blur-xl p-6 sm:p-8 shadow-sm relative"
     >
-      <div className="absolute top-0 right-0 h-64 w-64 -translate-y-1/2 translate-x-1/2 rounded-full bg-teal-500/5 blur-[80px] pointer-events-none" />
+      <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
+        <div className="absolute top-0 right-0 h-64 w-64 -translate-y-1/2 translate-x-1/2 rounded-full bg-teal-500/5 blur-[80px]" />
+      </div>
 
       <div className="mb-8 relative z-10">
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-teal-600 dark:text-teal-400">
@@ -157,7 +159,7 @@ export default function DoctorSchedule() {
         </h2>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2 relative z-10">
+      <div className="grid gap-6 lg:grid-cols-2 relative z-20">
         <div className="rounded-2xl border border-border/50 bg-background/50 p-6 transition-all hover:bg-muted/30 hover:shadow-md hover:border-teal-500/30">
           <div className="flex items-center gap-3 mb-6">
             <div className="flex size-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400">
