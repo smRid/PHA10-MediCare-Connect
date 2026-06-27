@@ -75,7 +75,7 @@ export default function AuthSidePanel() {
               <motion.img
                 src={content.image}
                 alt={content.title}
-                className="aspect-video w-full max-h-56 object-cover"
+                className={`aspect-video w-full max-h-56 object-cover ${isRegister ? 'object-[center_20%]' : ''}`}
                 animate={{ scale: 1.05 + Math.abs(mousePosition.x) * 0.001 }}
                 transition={{ type: "spring", stiffness: 75, damping: 25 }}
               />
