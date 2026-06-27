@@ -128,9 +128,11 @@ export default function PatientAppointments() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="rounded-3xl border border-border/50 bg-card/60 backdrop-blur-xl p-6 sm:p-8 shadow-sm relative overflow-hidden"
+      className="rounded-3xl border border-border/50 bg-card/60 backdrop-blur-xl p-6 sm:p-8 shadow-sm relative"
     >
-      <div className="absolute top-0 right-0 h-64 w-64 -translate-y-1/2 translate-x-1/2 rounded-full bg-primary/5 blur-[80px] pointer-events-none" />
+      <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
+        <div className="absolute top-0 right-0 h-64 w-64 -translate-y-1/2 translate-x-1/2 rounded-full bg-primary/5 blur-[80px]" />
+      </div>
 
       <div className="mb-8 relative z-10">
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
@@ -199,7 +201,7 @@ export default function PatientAppointments() {
                     <div className="mt-2 flex flex-wrap items-center gap-3 text-sm font-medium text-muted-foreground">
                       <span className="flex items-center gap-1.5"><CalendarDays className="size-3.5" />{formatDate(item.appointmentDate)}</span>
                       <span className="flex items-center gap-1.5"><Clock className="size-3.5" />{item.appointmentTime}</span>
-                      <span className="inline-flex items-center justify-center rounded-md bg-muted px-2.5 py-1 text-xs font-bold text-foreground border border-border/50">{currency(item.amount)}</span>
+                      <span className="inline-flex items-center justify-center rounded-md bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary border border-primary/20">{currency(item.amount)}</span>
                     </div>
                     {item.symptoms && (
                       <p className="mt-3 flex items-start gap-2 text-sm text-muted-foreground bg-muted/30 p-3 rounded-xl border border-border/50">
